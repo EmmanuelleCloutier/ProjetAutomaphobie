@@ -49,6 +49,11 @@ public class MannequinAI : MonoBehaviour
         // Son, animation de "réveil" si besoin
     }
 
+    public bool IsActive()
+    {
+        return currentState != State.Dormant;
+    }
+
     void UpdateActiveState()
     {
         float distance = Vector3.Distance(transform.position, playerHead.position);
