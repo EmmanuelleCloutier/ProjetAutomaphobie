@@ -1,26 +1,31 @@
 using UnityEngine;
-using UnityEngine.XR.Interaction.Toolkit;
-using UnityEngine.XR.Interaction.Toolkit.Interactables;
-using UnityEngine.XR.Interaction.Toolkit.Interactors;
 
 public class MannequinBehavior : MonoBehaviour
 {
     public bool bCanMove = false;
 
-    private void OnCollisionEnter(Collision collision)
+    /// <summary>
+    /// Call this when a raycast from the player first hits this mannequin.
+    /// </summary>
+    /// <param name="other">The GameObject whose raycast entered.</param>
+    public void OnRaycastEnter(GameObject other)
     {
-        Debug.Log("Collision");
-        if (collision.gameObject.CompareTag("Player"))
+        Debug.Log("Raycast Enter");
+        if (other.CompareTag("Player"))
         {
             Debug.Log("Cannot move");
             bCanMove = false;
         }
     }
 
-    private void OnCollisionExit(Collision collision)
+    /// <summary>
+    /// Call this when a raycast from the player stops hitting this mannequin.
+    /// </summary>
+    /// <param name="other">The GameObject whose raycast exited.</param>
+    public void OnRaycastExit(GameObject other)
     {
-        Debug.Log("Collision exit");
-        if (collision.gameObject.CompareTag("Player"))
+        Debug.Log("Raycast Exit");
+        if (other.CompareTag("Player"))
         {
             Debug.Log("Can move");
             bCanMove = true;
