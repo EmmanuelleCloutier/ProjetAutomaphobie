@@ -102,6 +102,9 @@ public class S_CloseDoor : MonoBehaviour
 
     private void DestroyPreviousWagon()
     {
+        // Destroy all bench-spawned objects from the previous wagon before the wagon itself.
+        S_SpawnOnBench.DestroyAll();
+
         if (previousWagon == null) return;
 
         Debug.Log($"[S_CloseDoor] Destroying previous wagon '{previousWagon.name}'.");

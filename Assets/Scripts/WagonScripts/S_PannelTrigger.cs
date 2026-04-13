@@ -69,6 +69,8 @@ public class S_PannelTrigger : MonoBehaviour
         GameObject root = FindKeyRoot(other.gameObject);
         if (root == null) return;
 
+        S_SpawnOnBench.DummyCount++;
+
         SpawnNextWagon();
         OpenDoor();
 
