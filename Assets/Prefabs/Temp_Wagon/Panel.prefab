@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 4351549096781219275}
   - component: {fileID: 7225326504420240474}
   - component: {fileID: 7296084568627541}
-  - component: {fileID: 6679516054239467280}
+  - component: {fileID: 4246406656277717427}
   m_Layer: 0
   m_Name: Panel
   m_TagString: Untagged
@@ -113,7 +113,7 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &6679516054239467280
+--- !u!114 &4246406656277717427
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -126,8 +126,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::S_OpenDoor
   door: {fileID: 0}
+  wagonPrefab: {fileID: 0}
+  nextWagonSpawnPoint: {fileID: 0}
   keyTag: Key
   consumeKey: 1
-  slideDirection: {x: 1, y: 0, z: 0}
-  slideDistance: 2
+  slideDirection: {x: 0, y: 0, z: 1}
+  slideDistance: 1
   openDuration: 1

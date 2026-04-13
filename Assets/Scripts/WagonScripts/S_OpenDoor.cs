@@ -1,31 +1,10 @@
-using UnityEngine;
+﻿using UnityEngine;
 
-/// <summary>
-/// Attach to a button/trigger collider in the wagon.
-/// When a GameObject tagged "Key" enters the trigger, the next wagon prefab is spawned
-/// at the NextWagon empty object's location, then the metro door slides open.
-/// The door is animated via its Animator (trigger "Open"), or slides along a local axis as a fallback.
-/// </summary>
-[RequireComponent(typeof(Collider))]
 public class S_OpenDoor : MonoBehaviour
 {
     [Header("References")]
     [Tooltip("The door GameObject to open. Must have an Animator with an 'Open' trigger, or will slide as fallback.")]
     public GameObject door;
-
-    [Header("Wagon Spawning")]
-    [Tooltip("The wagon prefab to instantiate when the door is opened.")]
-    public GameObject wagonPrefab;
-
-    [Tooltip("Empty GameObject named 'NextWagon' that defines where the next wagon spawns (position & rotation).")]
-    public Transform nextWagonSpawnPoint;
-
-    [Header("Key Settings")]
-    [Tooltip("Tag used to identify the Key prefab.")]
-    public string keyTag = "Key";
-
-    [Tooltip("Destroy the key after it is used to open the door.")]
-    public bool consumeKey = true;
 
     [Header("Fallback Slide (no Animator)")]
     [Tooltip("Local-space axis along which the door slides open (normalized automatically).")]
@@ -37,86 +16,36 @@ public class S_OpenDoor : MonoBehaviour
     [Tooltip("Duration in seconds for the sliding animation.")]
     public float openDuration = 1f;
 
-    // ?? State ??????????????????????????????????????????????????????????????????
+    // ── State ────────────────────────────────────────────────────────────────
     private bool m_IsOpen = false;
     private bool m_IsAnimating = false;
+
+    /// <summary>
+    /// Set this to <c>true</c> immediately after <c>Instantiate</c> so that
+    /// <c>Start</c> automatically opens the door.
+    /// Objects already present in the scene at startup never receive this call,
+    /// so their door remains closed.
+    /// </summary>
+    [HideInInspector]
+    public bool openOnStart = false;
 
     // Fallback slide data
     private Vector3 m_ClosedPosition;
     private Vector3 m_OpenPosition;
 
-    // ?? Unity Messages ?????????????????????????????????????????????????????????
-
-    void Start()
+    private void Start()
     {
-        // Make sure the trigger flag is set so OnTriggerEnter fires.
-        Collider col = GetComponent<Collider>();
-        if (col != null)
-            col.isTrigger = true;
-
         if (door != null)
         {
             m_ClosedPosition = door.transform.localPosition;
             m_OpenPosition   = m_ClosedPosition + slideDirection.normalized * slideDistance;
         }
+
+        if (openOnStart)
+            OpenDoor();
     }
 
-    void OnTriggerEnter(Collider other)
-    {
-        if (m_IsOpen || m_IsAnimating) return;
-
-        // Accept the key itself or any child collider belonging to a key root.
-        GameObject root = FindKeyRoot(other.gameObject);
-        if (root == null) return;
-
-        SpawnNextWagon();
-        OpenDoor();
-
-        if (consumeKey)
-            Destroy(root);
-    }
-
-    // ?? Private Helpers ????????????????????????????????????????????????????????
-
-    /// <summary>
-    /// Instantiates the wagon prefab at the NextWagon spawn point's position and rotation.
-    /// </summary>
-    private void SpawnNextWagon()
-    {
-        if (wagonPrefab == null)
-        {
-            Debug.LogWarning($"[S_OpenDoor] No wagon prefab assigned on {gameObject.name}.");
-            return;
-        }
-
-        if (nextWagonSpawnPoint == null)
-        {
-            Debug.LogWarning($"[S_OpenDoor] No NextWagon spawn point assigned on {gameObject.name}.");
-            return;
-        }
-
-        Instantiate(wagonPrefab, nextWagonSpawnPoint.position, nextWagonSpawnPoint.rotation);
-        Debug.Log($"[S_OpenDoor] Wagon '{wagonPrefab.name}' spawned at '{nextWagonSpawnPoint.name}'.");
-    }
-
-    /// <summary>
-    /// Walks up the hierarchy from <paramref name="obj"/> looking for a GameObject
-    /// whose tag matches <see cref="keyTag"/>. Returns null when not found.
-    /// </summary>
-    private GameObject FindKeyRoot(GameObject obj)
-    {
-        Transform current = obj.transform;
-        while (current != null)
-        {
-            if (current.CompareTag(keyTag))
-                return current.gameObject;
-            current = current.parent;
-        }
-        return null;
-    }
-
-    /// <summary>Opens the door via Animator trigger, or by sliding as a fallback.</summary>
-    private void OpenDoor()
+    public void OpenDoor()
     {
         if (door == null)
         {
@@ -137,7 +66,7 @@ public class S_OpenDoor : MonoBehaviour
             StartCoroutine(SlideDoor());
         }
 
-        Debug.Log($"[S_OpenDoor] Door '{door.name}' opened by key.");
+        Debug.Log($"[S_OpenDoor] Door '{door.name}' opened on spawn.");
     }
 
     private System.Collections.IEnumerator SlideDoor()
