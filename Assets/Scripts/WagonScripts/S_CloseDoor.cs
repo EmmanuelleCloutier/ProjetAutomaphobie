@@ -5,6 +5,8 @@
 /// When a GameObject tagged <see cref="playerTag"/> enters the trigger,
 /// the door is closed via its Animator ("Close" trigger) or slides back
 /// to its closed position as a fallback.
+/// Once the closing animation is complete the <see cref="previousWagon"/>
+/// GameObject is destroyed.
 /// </summary>
 [RequireComponent(typeof(Collider))]
 public class S_CloseDoor : MonoBehaviour
@@ -12,6 +14,9 @@ public class S_CloseDoor : MonoBehaviour
     [Header("References")]
     [Tooltip("The door GameObject to close. Must have an Animator with a 'Close' trigger, or will slide as fallback.")]
     public GameObject door;
+
+    [Tooltip("The previous wagon GameObject to destroy once the door has finished closing.")]
+    public GameObject previousWagon;
 
     [Header("Player Settings")]
     [Tooltip("Tag used to identify the player.")]
@@ -26,6 +31,10 @@ public class S_CloseDoor : MonoBehaviour
 
     [Tooltip("Duration in seconds for the closing animation.")]
     public float closeDuration = 1f;
+
+    [Header("Animator Path")]
+    [Tooltip("When an Animator is used, the previous wagon is destroyed after this delay (seconds). Set it to match the length of the 'Close' animation clip.")]
+    public float animatorDestroyDelay = 1f;
 
     // ── State ────────────────────────────────────────────────────────────────
     private bool m_IsClosed = false;
@@ -78,14 +87,25 @@ public class S_CloseDoor : MonoBehaviour
         if (animator != null)
         {
             animator.SetTrigger("Close");
+            // Destroy the previous wagon after the animation clip has had time to play.
+            Invoke(nameof(DestroyPreviousWagon), animatorDestroyDelay);
         }
         else
         {
-            // Fallback: smoothly slide the door back to its closed position.
+            // Fallback: smoothly slide the door back to its closed position,
+            // then destroy the previous wagon at the end of the coroutine.
             StartCoroutine(SlideDoorClosed());
         }
 
         Debug.Log($"[S_CloseDoor] Door '{door.name}' closed – player entered trigger on '{gameObject.name}'.");
+    }
+
+    private void DestroyPreviousWagon()
+    {
+        if (previousWagon == null) return;
+
+        Debug.Log($"[S_CloseDoor] Destroying previous wagon '{previousWagon.name}'.");
+        Destroy(previousWagon);
     }
 
     private System.Collections.IEnumerator SlideDoorClosed()
@@ -106,5 +126,7 @@ public class S_CloseDoor : MonoBehaviour
 
         door.transform.localPosition = m_ClosedPosition;
         m_IsAnimating = false;
+
+        DestroyPreviousWagon();
     }
 }

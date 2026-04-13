@@ -16,10 +16,6 @@ public class S_OpenDoor : MonoBehaviour
     [Tooltip("Duration in seconds for the sliding animation.")]
     public float openDuration = 1f;
 
-    // ── State ────────────────────────────────────────────────────────────────
-    private bool m_IsOpen = false;
-    private bool m_IsAnimating = false;
-
     /// <summary>
     /// Set this to <c>true</c> immediately after <c>Instantiate</c> so that
     /// <c>Start</c> automatically opens the door.
@@ -53,8 +49,6 @@ public class S_OpenDoor : MonoBehaviour
             return;
         }
 
-        m_IsOpen = true;
-
         Animator animator = door.GetComponent<Animator>();
         if (animator != null)
         {
@@ -71,7 +65,6 @@ public class S_OpenDoor : MonoBehaviour
 
     private System.Collections.IEnumerator SlideDoor()
     {
-        m_IsAnimating = true;
         float elapsed = 0f;
 
         while (elapsed < openDuration)
@@ -85,6 +78,5 @@ public class S_OpenDoor : MonoBehaviour
         }
 
         door.transform.localPosition = m_OpenPosition;
-        m_IsAnimating = false;
     }
 }

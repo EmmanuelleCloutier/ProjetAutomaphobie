@@ -97,13 +97,23 @@ public class S_PannelTrigger : MonoBehaviour
 
         GameObject newWagon = Instantiate(wagonPrefab, nextWagonSpawnPoint.position, nextWagonSpawnPoint.rotation);
 
+        // The root of the wagon this panel belongs to – will be destroyed once
+        // the new wagon's door closes behind the player.
+        GameObject currentWagonRoot = transform.root.gameObject;
+
         // Tell every S_OpenDoor on the newly spawned wagon that it was created at
         // runtime, so their Start() will auto-open the door.
         // This assignment happens before Unity calls Start() on the new instance.
         foreach (S_OpenDoor openDoor in newWagon.GetComponentsInChildren<S_OpenDoor>(includeInactive: true))
             openDoor.openOnStart = true;
 
-        Debug.Log($"[S_OpenDoor] Wagon '{wagonPrefab.name}' spawned at '{nextWagonSpawnPoint.name}'.");
+        // Wire up every S_CloseDoor on the new wagon so it knows which wagon to
+        // destroy once the player has crossed over and the door has shut.
+        foreach (S_CloseDoor closeDoor in newWagon.GetComponentsInChildren<S_CloseDoor>(includeInactive: true))
+            closeDoor.previousWagon = currentWagonRoot;
+
+        Debug.Log($"[S_OpenDoor] Wagon '{wagonPrefab.name}' spawned at '{nextWagonSpawnPoint.name}'. " +
+                  $"Previous wagon '{currentWagonRoot.name}' queued for destruction on door close.");
     }
 
     /// <summary>
