@@ -19,7 +19,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &386370031135465515
 Transform:
   m_ObjectHideFlags: 0
@@ -128,3 +128,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MannequinBehavior
   bCanMove: 0
+  teleportDistance: 0.5
+  teleportInterval: 1
+  jumpscareObject: {fileID: 0}
+  jumpscareDistance: 0.3
+  reloadDelay: 2
