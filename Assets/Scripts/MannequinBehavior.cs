@@ -20,6 +20,20 @@ public class MannequinBehavior : MonoBehaviour
     public float reloadDelay = 2f;
     public Transform jumpscarePosition;
 
+    [Header("Son")]
+    [Tooltip("JumpScareSFX")]
+    public AudioClip jumpscareSound;
+    [Tooltip("Volume")]
+    [Range(0f, 1f)]
+    public float soundVolume = 1f;
+
+    [Tooltip("StepSFX")]
+    public AudioClip footstepSounds;
+    [Tooltip("Volume")]
+    [Range(0f, 1f)]
+    public float footstepVolume = 1f;
+    private AudioSource m_AudioSource;
+
 
     private Transform m_PlayerTransform;
     private Camera m_PlayerCamera;
@@ -58,6 +72,14 @@ public class MannequinBehavior : MonoBehaviour
 
             Vector3 direction = (m_PlayerTransform.position - transform.position).normalized;
             Vector3 newPosition = transform.position + direction * teleportDistance;
+
+            if (footstepSounds != null && m_AudioSource != null)
+            {
+                AudioClip clip = footstepSounds;
+                if (clip != null)
+                    m_AudioSource.PlayOneShot(clip, footstepVolume);
+            }
+
             newPosition.y = transform.position.y;
             m_Rigidbody.MovePosition(newPosition);
         }
@@ -107,6 +129,11 @@ public class MannequinBehavior : MonoBehaviour
             jumpscareObject.transform.position = jumpscarePosition.position;
             jumpscareObject.transform.rotation = jumpscarePosition.rotation;
             jumpscareObject.SetActive(true);
+        }
+
+        if (jumpscareSound != null && m_AudioSource != null)
+        {
+            m_AudioSource.PlayOneShot(jumpscareSound, soundVolume);
         }
 
         Invoke(nameof(ReloadLevel), reloadDelay);
