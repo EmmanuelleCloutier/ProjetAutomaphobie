@@ -63,7 +63,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1154333661186954539}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 051d072b5758c2a4ca40932613211276, type: 3}
   m_Name: 
@@ -75,7 +75,6 @@ MonoBehaviour:
   spawnPointName: SpawnPoint
   spawnOnStart: 1
   spawnDelay: 0
-  spawnedTag: SpawnedOnBench
 --- !u!1 &5684255829158059088
 GameObject:
   m_ObjectHideFlags: 0
