@@ -1,0 +1,25 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <ui:VisualElement name="root" class="screen-root">
+        <ui:VisualElement name="header" class="header-bar">
+            <ui:VisualElement name="line-left" class="accent-line"/>
+            <ui:Label name="ligne-label" text="LIGNE 12 — TERMINUS" class="overline-label"/>
+            <ui:VisualElement name="line-right" class="accent-line flex-grow"/>
+        </ui:VisualElement>
+        <ui:VisualElement name="title-block" class="title-block">
+            <ui:Label name="game-title" text="SIMULACRES" class="game-title"/>
+            <ui:Label name="subtitle" text="UNE EXPÉRIENCE DE PEUR — AUTOMATONOPHOBIE" class="game-subtitle"/>
+        </ui:VisualElement>
+        <ui:VisualElement name="mannequin-strip" class="mannequin-strip">
+            <ui:VisualElement name="m1" class="mannequin-silhouette"/>
+            <ui:VisualElement name="m2" class="mannequin-silhouette"/>
+            <ui:VisualElement name="m3" class="mannequin-silhouette"/>
+        </ui:VisualElement>
+        <ui:VisualElement name="separator-red" class="separator-red"/>
+        <ui:VisualElement name="button-group" class="button-group">
+            <ui:Button name="btn-jouer" text="[ ENTRER DANS LE MÉTRO ]" class="btn-primary"/>
+            <ui:Button name="btn-parametres" text="PARAMÈTRES" class="btn-ghost"/>
+            <ui:Button name="btn-quitter" text="QUITTER" class="btn-ghost"/>
+        </ui:VisualElement>
+        <ui:VisualElement name="footer" class="footer-bar"/>
+    </ui:VisualElement>
+</ui:UXML>

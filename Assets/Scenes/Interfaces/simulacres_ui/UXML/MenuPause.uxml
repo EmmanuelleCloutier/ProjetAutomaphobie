@@ -1,0 +1,39 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements">
+    <ui:VisualElement name="root" class="screen-root">
+
+        <ui:VisualElement name="pause-header" class="pause-header">
+            <ui:VisualElement name="left" class="pause-header-left">
+                <ui:Label name="pause-tag" text="— PAUSE —" class="overline-label" />
+                <ui:Label name="pause-message" text="Le métro vous attend." class="pause-message" />
+            </ui:VisualElement>
+            <ui:VisualElement name="right" class="pause-header-right">
+                <ui:Label name="wagon-label" text="WAGON" class="footer-label-dim" />
+                <ui:Label name="wagon-value" text="02 / 03" class="wagon-counter-value" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+
+        <ui:VisualElement name="separator" class="separator-dark" />
+
+        <ui:VisualElement name="info-grid" class="info-grid">
+            <ui:VisualElement name="card-objectif" class="info-card">
+                <ui:Label name="obj-label" text="OBJECTIF" class="card-label" />
+                <ui:Label name="obj-value" text="Trouver la clé sur l'un des mannequins" class="card-value" />
+            </ui:VisualElement>
+            <ui:VisualElement name="card-etat" class="info-card">
+                <ui:Label name="etat-label" text="ÉTAT" class="card-label" />
+                <ui:VisualElement name="anxiety-bar-bg" class="anxiety-bar-bg">
+                    <ui:VisualElement name="anxiety-bar-fill" class="anxiety-bar-fill" />
+                </ui:VisualElement>
+                <ui:Label name="anxiety-value" text="62%" class="anxiety-percent" />
+                <ui:Label name="anxiety-name" text="Anxiété" class="card-label" style="margin-top: 4px;" />
+            </ui:VisualElement>
+        </ui:VisualElement>
+
+        <ui:VisualElement name="button-group" class="button-group">
+            <ui:Button name="btn-reprendre" text="[ REPRENDRE ]" class="btn-primary" />
+            <ui:Button name="btn-recommencer" text="RECOMMENCER CE WAGON" class="btn-ghost" />
+            <ui:Button name="btn-menu" text="QUITTER AU MENU" class="btn-ghost" />
+        </ui:VisualElement>
+
+    </ui:VisualElement>
+</ui:UXML>
