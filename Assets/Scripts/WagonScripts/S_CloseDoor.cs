@@ -3,7 +3,7 @@
 /// <summary>
 /// Attach to a box-volume trigger collider inside the wagon.
 /// When a GameObject tagged <see cref="playerTag"/> enters the trigger,
-/// the door is closed via its Animator ("Close" trigger) or slides back
+/// the door is closed via its Animator ("Close" trigger) or rotates back
 /// to its closed position as a fallback.
 /// Once the closing animation is complete the <see cref="previousWagon"/>
 /// GameObject is destroyed.
@@ -12,7 +12,7 @@
 public class S_CloseDoor : MonoBehaviour
 {
     [Header("References")]
-    [Tooltip("The door GameObject to close. Must have an Animator with a 'Close' trigger, or will slide as fallback.")]
+    [Tooltip("The door GameObject to close. Must have an Animator with a 'Close' trigger, or will rotate as fallback.")]
     public GameObject door;
 
     [Tooltip("The previous wagon GameObject to destroy once the door has finished closing.")]
@@ -22,27 +22,27 @@ public class S_CloseDoor : MonoBehaviour
     [Tooltip("Tag used to identify the player.")]
     public string playerTag = "Player";
 
-    [Header("Fallback Slide (no Animator)")]
-    [Tooltip("Local-space axis along which the door slides open (normalized automatically). The door will slide back along the opposite direction to close.")]
-    public Vector3 slideDirection = new Vector3(0f, 0f, 1f);
+    [Header("Fallback Rotation (no Animator)")]
+    [Tooltip("Local-space axis around which the door rotates (same as S_OpenDoor).")]
+    public Vector3 rotationAxis = new Vector3(0f, 1f, 0f);
 
-    [Tooltip("Distance in units the door slides when fully open (used to compute the open position).")]
-    public float slideDistance = 1f;
+    [Tooltip("Degrees the door was rotated when open (used to compute the open rotation).")]
+    public float rotationAngle = 90f;
 
     [Tooltip("Duration in seconds for the closing animation.")]
     public float closeDuration = 1f;
 
     [Header("Animator Path")]
-    [Tooltip("When an Animator is used, the previous wagon is destroyed after this delay (seconds). Set it to match the length of the 'Close' animation clip.")]
+    [Tooltip("Delay before destroying the previous wagon when using an Animator (match the 'Close' clip length).")]
     public float animatorDestroyDelay = 1f;
 
     // ── State ────────────────────────────────────────────────────────────────
     private bool m_IsClosed = false;
     private bool m_IsAnimating = false;
 
-    // Fallback slide data
-    private Vector3 m_ClosedPosition;
-    private Vector3 m_OpenPosition;
+    // Fallback rotation data
+    private Quaternion m_ClosedRotation;
+    private Quaternion m_OpenRotation;
 
     // ── Unity Messages ───────────────────────────────────────────────────────
 
@@ -55,9 +55,9 @@ public class S_CloseDoor : MonoBehaviour
 
         if (door != null)
         {
-            // The door starts in its open position; record both positions for the slide fallback.
-            m_OpenPosition   = door.transform.localPosition;
-            m_ClosedPosition = m_OpenPosition - slideDirection.normalized * slideDistance;
+            // The door starts in its open rotation; derive the closed rotation from it.
+            m_OpenRotation   = door.transform.localRotation;
+            m_ClosedRotation = m_OpenRotation * Quaternion.AngleAxis(-rotationAngle, rotationAxis.normalized);
         }
     }
 
@@ -72,7 +72,7 @@ public class S_CloseDoor : MonoBehaviour
 
     // ── Private Helpers ──────────────────────────────────────────────────────
 
-    /// <summary>Closes the door via Animator trigger, or by sliding as a fallback.</summary>
+    /// <summary>Closes the door via Animator trigger, or by rotating as a fallback.</summary>
     private void CloseDoor()
     {
         if (door == null)
@@ -92,9 +92,9 @@ public class S_CloseDoor : MonoBehaviour
         }
         else
         {
-            // Fallback: smoothly slide the door back to its closed position,
+            // Fallback: smoothly rotate the door back to its closed rotation,
             // then destroy the previous wagon at the end of the coroutine.
-            StartCoroutine(SlideDoorClosed());
+            StartCoroutine(RotateDoorClosed());
         }
 
         Debug.Log($"[S_CloseDoor] Door '{door.name}' closed – player entered trigger on '{gameObject.name}'.");
@@ -111,11 +111,11 @@ public class S_CloseDoor : MonoBehaviour
         Destroy(previousWagon);
     }
 
-    private System.Collections.IEnumerator SlideDoorClosed()
+    private System.Collections.IEnumerator RotateDoorClosed()
     {
         m_IsAnimating = true;
         float elapsed = 0f;
-        Vector3 startPosition = door.transform.localPosition;
+        Quaternion startRotation = door.transform.localRotation;
 
         while (elapsed < closeDuration)
         {
@@ -123,11 +123,11 @@ public class S_CloseDoor : MonoBehaviour
             float t = Mathf.Clamp01(elapsed / closeDuration);
             // Smooth-step easing
             t = t * t * (3f - 2f * t);
-            door.transform.localPosition = Vector3.Lerp(startPosition, m_ClosedPosition, t);
+            door.transform.localRotation = Quaternion.Slerp(startRotation, m_ClosedRotation, t);
             yield return null;
         }
 
-        door.transform.localPosition = m_ClosedPosition;
+        door.transform.localRotation = m_ClosedRotation;
         m_IsAnimating = false;
 
         DestroyPreviousWagon();

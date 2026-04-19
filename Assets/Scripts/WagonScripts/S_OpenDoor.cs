@@ -3,17 +3,17 @@
 public class S_OpenDoor : MonoBehaviour
 {
     [Header("References")]
-    [Tooltip("The door GameObject to open. Must have an Animator with an 'Open' trigger, or will slide as fallback.")]
+    [Tooltip("The door GameObject to open. Must have an Animator with an 'Open' trigger, or will rotate as fallback.")]
     public GameObject door;
 
-    [Header("Fallback Slide (no Animator)")]
-    [Tooltip("Local-space axis along which the door slides open (normalized automatically).")]
-    public Vector3 slideDirection = new Vector3(1f, 0f, 0f);
+    [Header("Fallback Rotation (no Animator)")]
+    [Tooltip("Local-space axis around which the door rotates open.")]
+    public Vector3 rotationAxis = new Vector3(0f, 1f, 0f);
 
-    [Tooltip("Distance in units the door slides to fully open.")]
-    public float slideDistance = 2f;
+    [Tooltip("Degrees the door rotates to fully open (positive = counterclockwise around axis).")]
+    public float rotationAngle = 90f;
 
-    [Tooltip("Duration in seconds for the sliding animation.")]
+    [Tooltip("Duration in seconds for the rotation animation.")]
     public float openDuration = 1f;
 
     /// <summary>
@@ -25,16 +25,16 @@ public class S_OpenDoor : MonoBehaviour
     [HideInInspector]
     public bool openOnStart = false;
 
-    // Fallback slide data
-    private Vector3 m_ClosedPosition;
-    private Vector3 m_OpenPosition;
+    // Fallback rotation data
+    private Quaternion m_ClosedRotation;
+    private Quaternion m_OpenRotation;
 
     private void Start()
     {
         if (door != null)
         {
-            m_ClosedPosition = door.transform.localPosition;
-            m_OpenPosition   = m_ClosedPosition + slideDirection.normalized * slideDistance;
+            m_ClosedRotation = door.transform.localRotation;
+            m_OpenRotation   = m_ClosedRotation * Quaternion.AngleAxis(rotationAngle, rotationAxis.normalized);
         }
 
         if (openOnStart)
@@ -56,14 +56,14 @@ public class S_OpenDoor : MonoBehaviour
         }
         else
         {
-            // Fallback: smoothly slide the door.
-            StartCoroutine(SlideDoor());
+            // Fallback: smoothly rotate the door.
+            StartCoroutine(RotateDoor());
         }
 
         Debug.Log($"[S_OpenDoor] Door '{door.name}' opened on spawn.");
     }
 
-    private System.Collections.IEnumerator SlideDoor()
+    private System.Collections.IEnumerator RotateDoor()
     {
         float elapsed = 0f;
 
@@ -73,10 +73,10 @@ public class S_OpenDoor : MonoBehaviour
             float t = Mathf.Clamp01(elapsed / openDuration);
             // Smooth-step easing
             t = t * t * (3f - 2f * t);
-            door.transform.localPosition = Vector3.Lerp(m_ClosedPosition, m_OpenPosition, t);
+            door.transform.localRotation = Quaternion.Slerp(m_ClosedRotation, m_OpenRotation, t);
             yield return null;
         }
 
-        door.transform.localPosition = m_OpenPosition;
+        door.transform.localRotation = m_OpenRotation;
     }
 }

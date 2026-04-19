@@ -4,13 +4,13 @@ using UnityEngine;
 /// Attach to a button/trigger collider in the wagon.
 /// When a GameObject tagged "Key" enters the trigger, the next wagon prefab is spawned
 /// at the NextWagon empty object's location, then the metro door slides open.
-/// The door is animated via its Animator (trigger "Open"), or slides along a local axis as a fallback.
+/// The door is animated via its Animator (trigger "Open"), or rotates around an axis as a fallback.
 /// </summary>
 [RequireComponent(typeof(Collider))]
 public class S_PannelTrigger : MonoBehaviour
 {
     [Header("References")]
-    [Tooltip("The door GameObject to open. Must have an Animator with an 'Open' trigger, or will slide as fallback.")]
+    [Tooltip("The door GameObject to open. Must have an Animator with an 'Open' trigger, or will rotate as fallback.")]
     public GameObject door;
 
     [Header("Wagon Spawning")]
@@ -27,23 +27,23 @@ public class S_PannelTrigger : MonoBehaviour
     [Tooltip("Destroy the key after it is used to open the door.")]
     public bool consumeKey = true;
 
-    [Header("Fallback Slide (no Animator)")]
-    [Tooltip("Local-space axis along which the door slides open (normalized automatically).")]
-    public Vector3 slideDirection = new Vector3(1f, 0f, 0f);
+    [Header("Fallback Rotation (no Animator)")]
+    [Tooltip("Local-space axis around which the door rotates open.")]
+    public Vector3 rotationAxis = new Vector3(0f, 1f, 0f);
 
-    [Tooltip("Distance in units the door slides to fully open.")]
-    public float slideDistance = 2f;
+    [Tooltip("Degrees the door rotates to fully open (positive = counterclockwise around axis).")]
+    public float rotationAngle = 90f;
 
-    [Tooltip("Duration in seconds for the sliding animation.")]
+    [Tooltip("Duration in seconds for the rotation animation.")]
     public float openDuration = 1f;
 
     // ?? State ??????????????????????????????????????????????????????????????????
     private bool m_IsOpen = false;
     private bool m_IsAnimating = false;
 
-    // Fallback slide data
-    private Vector3 m_ClosedPosition;
-    private Vector3 m_OpenPosition;
+    // Fallback rotation data
+    private Quaternion m_ClosedRotation;
+    private Quaternion m_OpenRotation;
 
     // ?? Unity Messages ?????????????????????????????????????????????????????????
 
@@ -56,18 +56,29 @@ public class S_PannelTrigger : MonoBehaviour
 
         if (door != null)
         {
-            m_ClosedPosition = door.transform.localPosition;
-            m_OpenPosition   = m_ClosedPosition + slideDirection.normalized * slideDistance;
+            m_ClosedRotation = door.transform.localRotation;
+            m_OpenRotation   = m_ClosedRotation * Quaternion.AngleAxis(rotationAngle, rotationAxis.normalized);
         }
     }
 
     void OnTriggerEnter(Collider other)
     {
-        if (m_IsOpen || m_IsAnimating) return;
+        Debug.Log($"[S_PannelTrigger] OnTriggerEnter hit by '{other.gameObject.name}' (tag: '{other.tag}')");
 
-        // Accept the key itself or any child collider belonging to a key root.
+        if (m_IsOpen || m_IsAnimating)
+        {
+            Debug.Log($"[S_PannelTrigger] Ignored – m_IsOpen={m_IsOpen}, m_IsAnimating={m_IsAnimating}");
+            return;
+        }
+
         GameObject root = FindKeyRoot(other.gameObject);
-        if (root == null) return;
+        if (root == null)
+        {
+            Debug.Log($"[S_PannelTrigger] No key root found on '{other.gameObject.name}' – expected tag '{keyTag}'");
+            return;
+        }
+
+        Debug.Log($"[S_PannelTrigger] Key '{root.name}' accepted – spawning wagon and opening door.");
 
         S_SpawnOnBench.DummyCount++;
 
@@ -78,11 +89,6 @@ public class S_PannelTrigger : MonoBehaviour
             Destroy(root);
     }
 
-    // ?? Private Helpers ????????????????????????????????????????????????????????
-
-    /// <summary>
-    /// Instantiates the wagon prefab at the NextWagon spawn point's position and rotation.
-    /// </summary>
     private void SpawnNextWagon()
     {
         if (wagonPrefab == null)
@@ -134,12 +140,12 @@ public class S_PannelTrigger : MonoBehaviour
         return null;
     }
 
-    /// <summary>Opens the door via Animator trigger, or by sliding as a fallback.</summary>
+    /// <summary>Opens the door via Animator trigger, or by rotating as a fallback.</summary>
     private void OpenDoor()
     {
         if (door == null)
         {
-            Debug.LogWarning($"[S_OpenDoor] No door assigned on {gameObject.name}.");
+            Debug.LogWarning($"[S_PannelTrigger] No door assigned on {gameObject.name}.");
             return;
         }
 
@@ -148,33 +154,35 @@ public class S_PannelTrigger : MonoBehaviour
         Animator animator = door.GetComponent<Animator>();
         if (animator != null)
         {
+            Debug.Log($"[S_PannelTrigger] Using Animator on '{door.name}' – setting trigger 'Open'.");
             animator.SetTrigger("Open");
         }
         else
         {
-            // Fallback: smoothly slide the door.
-            StartCoroutine(SlideDoor());
+            Debug.Log($"[S_PannelTrigger] No Animator on '{door.name}' – starting rotation coroutine. ClosedRot={m_ClosedRotation.eulerAngles}, OpenRot={m_OpenRotation.eulerAngles}");
+            StartCoroutine(RotateDoor());
         }
-
-        Debug.Log($"[S_OpenDoor] Door '{door.name}' opened by key.");
     }
 
-    private System.Collections.IEnumerator SlideDoor()
+    private System.Collections.IEnumerator RotateDoor()
     {
         m_IsAnimating = true;
         float elapsed = 0f;
+
+        Debug.Log($"[S_PannelTrigger] RotateDoor coroutine started. Door: '{door.name}', ClosedRot={m_ClosedRotation.eulerAngles}, OpenRot={m_OpenRotation.eulerAngles}");
 
         while (elapsed < openDuration)
         {
             elapsed += Time.deltaTime;
             float t = Mathf.Clamp01(elapsed / openDuration);
-            // Smooth-step easing
             t = t * t * (3f - 2f * t);
-            door.transform.localPosition = Vector3.Lerp(m_ClosedPosition, m_OpenPosition, t);
+            door.transform.localRotation = Quaternion.Slerp(m_ClosedRotation, m_OpenRotation, t);
+            Debug.Log($"[S_PannelTrigger] RotateDoor t={t:F2}, localRot={door.transform.localRotation.eulerAngles}, elapsed={elapsed:F2}/{openDuration}");
             yield return null;
         }
 
-        door.transform.localPosition = m_OpenPosition;
+        door.transform.localRotation = m_OpenRotation;
+        Debug.Log($"[S_PannelTrigger] RotateDoor complete. Final localRot={door.transform.localRotation.eulerAngles}");
         m_IsAnimating = false;
     }
 }
