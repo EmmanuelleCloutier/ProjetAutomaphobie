@@ -13,11 +13,13 @@ public class S_SpawnOnBench : MonoBehaviour
 {
     // ── Static counts (shared across all instances / configurable at runtime) ─
 
+    public static int WagonNumber = 1;
+
     /// <summary>Number of enemy prefabs to spawn across the benches.</summary>
-    public static int EnemyCount = 2;
+    public static int EnemyCount = 0;
 
     /// <summary>Number of dummy prefabs to spawn across the benches.</summary>
-    public static int DummyCount = 3;
+    public static int DummyCount = 2;
 
     // ── Static spawn registry (shared across ALL instances) ───────────────────
 
@@ -94,6 +96,12 @@ public class S_SpawnOnBench : MonoBehaviour
     /// </summary>
     public void SpawnAll()
     {
+        // Dummies = wagon number + 1; enemies = dummies / 3 (floor).
+        DummyCount = WagonNumber + 1;
+        EnemyCount = DummyCount / 3;
+
+        Debug.Log($"[S_SpawnOnBench] WagonNumber={WagonNumber} → DummyCount={DummyCount}, EnemyCount={EnemyCount}");
+
         // Whatever was current is now the previous generation.
         s_PreviousSpawned.Clear();
         s_PreviousSpawned.AddRange(s_CurrentSpawned);

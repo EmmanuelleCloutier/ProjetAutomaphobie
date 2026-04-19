@@ -80,7 +80,7 @@ public class S_PannelTrigger : MonoBehaviour
 
         Debug.Log($"[S_PannelTrigger] Key '{root.name}' accepted – spawning wagon and opening door.");
 
-        S_SpawnOnBench.DummyCount++;
+        S_SpawnOnBench.WagonNumber++;
 
         SpawnNextWagon();
         OpenDoor();
