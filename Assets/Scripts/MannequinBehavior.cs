@@ -81,6 +81,7 @@ public class MannequinBehavior : MonoBehaviour
             }
 
             newPosition.y = transform.position.y;
+            //transform.position = newPosition;
             m_Rigidbody.MovePosition(newPosition);
         }
     }

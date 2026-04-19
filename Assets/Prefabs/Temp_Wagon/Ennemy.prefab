@@ -19,7 +19,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &386370031135465515
 Transform:
   m_ObjectHideFlags: 0
@@ -133,3 +133,8 @@ MonoBehaviour:
   jumpscareObject: {fileID: 0}
   jumpscareDistance: 0.3
   reloadDelay: 2
+  jumpscarePosition: {fileID: 0}
+  jumpscareSound: {fileID: 0}
+  soundVolume: 1
+  footstepSounds: {fileID: 0}
+  footstepVolume: 1
