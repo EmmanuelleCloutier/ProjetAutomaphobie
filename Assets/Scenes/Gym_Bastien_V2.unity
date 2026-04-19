@@ -498,6 +498,10 @@ PrefabInstance:
       propertyPath: m_SizeDelta.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2520927224880245325, guid: facdee35a04486842b877aff7c2ff489, type: 3}
+      propertyPath: m_TagString
+      value: Jumpscare
+      objectReference: {fileID: 0}
     - target: {fileID: 3336985447596542861, guid: facdee35a04486842b877aff7c2ff489, type: 3}
       propertyPath: m_LocalPosition.x
       value: -4.503

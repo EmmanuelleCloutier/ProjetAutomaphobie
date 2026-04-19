@@ -50,6 +50,7 @@ public class MannequinBehavior : MonoBehaviour
         {
             m_PlayerTransform = player.transform;
             m_PlayerCamera = player.GetComponentInChildren<Camera>();
+            jumpscareObject = GameObject.FindWithTag("Jumpscare");
         }
         else
         {
