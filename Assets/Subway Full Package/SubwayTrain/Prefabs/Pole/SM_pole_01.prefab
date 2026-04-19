@@ -393,7 +393,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1105535034210493038}
   m_Layer: 0
-  m_Name: EnnemySpwan
+  m_Name: EnemySpawn
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

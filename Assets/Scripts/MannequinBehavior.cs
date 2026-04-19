@@ -32,7 +32,7 @@ public class MannequinBehavior : MonoBehaviour
     [Tooltip("Volume")]
     [Range(0f, 1f)]
     public float footstepVolume = 1f;
-    private AudioSource m_AudioSource;
+    public AudioSource m_AudioSource;
 
 
     private Transform m_PlayerTransform;
@@ -45,12 +45,21 @@ public class MannequinBehavior : MonoBehaviour
     {
         m_Rigidbody = GetComponent<Rigidbody>();
 
+        if (m_AudioSource == null)
+        {
+            GameObject audioManager = GameObject.Find("AudioManager");
+            if (audioManager != null)
+                m_AudioSource = audioManager.GetComponent<AudioSource>();
+            else
+                Debug.LogWarning("MannequinBehavior: No GameObject named 'AudioManager' found in the scene.", this);
+        }
+
         GameObject player = GameObject.FindWithTag("Player");
         if (player != null)
         {
             m_PlayerTransform = player.transform;
             m_PlayerCamera = player.GetComponentInChildren<Camera>();
-            jumpscareObject = GameObject.FindWithTag("Jumpscare");
+            jumpscarePosition = GameObject.FindWithTag("Jumpscare").transform;
         }
         else
         {
@@ -82,8 +91,8 @@ public class MannequinBehavior : MonoBehaviour
             }
 
             newPosition.y = transform.position.y;
-            //transform.position = newPosition;
-            m_Rigidbody.MovePosition(newPosition);
+            transform.position = newPosition;
+            //m_Rigidbody.MovePosition(newPosition);
         }
     }
 
@@ -111,6 +120,7 @@ public class MannequinBehavior : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        Debug.Log("Trigger Enter: " + other.gameObject.name);
         // Cherche le tag sur l'objet OU ses parents
         if ((other.CompareTag("Player") ||
              other.transform.root.CompareTag("Player")) && !m_IsDead)
@@ -125,12 +135,13 @@ public class MannequinBehavior : MonoBehaviour
         m_IsDead = true;
         bCanMove = false;
 
-        // Positionner le jumpscare devant la caméra du joueur
+        // Spawn a new jumpscare instance oriented in front of the player camera
         if (jumpscareObject != null && m_PlayerCamera != null)
         {
-            jumpscareObject.transform.position = jumpscarePosition.position;
-            jumpscareObject.transform.rotation = jumpscarePosition.rotation;
-            jumpscareObject.SetActive(true);
+            Vector3 spawnPosition = m_PlayerCamera.transform.position + m_PlayerCamera.transform.forward * jumpscareDistance;
+            Quaternion spawnRotation = m_PlayerCamera.transform.rotation;
+            GameObject instance = Instantiate(jumpscareObject, spawnPosition, spawnRotation);
+            instance.SetActive(true);
         }
 
         if (jumpscareSound != null && m_AudioSource != null)
