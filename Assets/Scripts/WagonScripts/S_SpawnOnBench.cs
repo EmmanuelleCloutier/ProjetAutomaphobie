@@ -49,6 +49,10 @@ public class S_SpawnOnBench : MonoBehaviour
              "Falls back to the bench root if not found.")]
     public string spawnPointName = "SpawnPoint";
 
+    [Tooltip("Name of the child Transform inside each bench that marks the enemy spawn position. " +
+             "Falls back to the bench root if not found.")]
+    public string enemySpawnPointName = "EnnemySpwan";
+
     [Header("Timing")]
     [Tooltip("Spawn everything automatically when the scene starts.")]
     public bool spawnOnStart = true;
@@ -140,14 +144,14 @@ public class S_SpawnOnBench : MonoBehaviour
         int benchIndex = 0;
 
         // Spawn enemies.
-        SpawnGroup(enemyPrefab, "Enemy", EnemyCount, availableBenches, ref benchIndex);
+        SpawnGroup(enemyPrefab, "Enemy", EnemyCount, availableBenches, ref benchIndex, enemySpawnPointName);
 
         // Spawn dummies.
-        SpawnGroup(dummyPrefab, "Dummy", DummyCount, availableBenches, ref benchIndex);
+        SpawnGroup(dummyPrefab, "Dummy", DummyCount, availableBenches, ref benchIndex, spawnPointName);
 
         // Spawn the key on one of the remaining benches.
         if (keyPrefab != null)
-            SpawnGroup(keyPrefab, "Key", 1, availableBenches, ref benchIndex);
+            SpawnGroup(keyPrefab, "Key", 1, availableBenches, ref benchIndex, spawnPointName);
     }
 
     // ── Helpers ───────────────────────────────────────────────────────────────
@@ -160,12 +164,14 @@ public class S_SpawnOnBench : MonoBehaviour
     /// by any future call to <see cref="DestroyAll"/>.
     /// </summary>
     private void SpawnGroup(GameObject prefab, string label, int count,
-                            List<Transform> benches, ref int index)
+                            List<Transform> benches, ref int index, string spawnPoint = null)
     {
+        if (spawnPoint == null) spawnPoint = spawnPointName;
+
         if (prefab == null)
         {
             Debug.LogWarning($"[S_SpawnOnBench] '{label}' prefab is not assigned – skipping.");
-            index += count; // Still advance so later groups stay in the right slot.
+            index += count;
             return;
         }
 
@@ -179,13 +185,13 @@ public class S_SpawnOnBench : MonoBehaviour
             }
 
             Transform bench = benches[index];
-            Transform spawnPoint = bench.Find(spawnPointName) ?? bench;
+            Transform spawnTransform = bench.Find(spawnPoint) ?? bench;
 
-            GameObject spawned = Instantiate(prefab, spawnPoint.position, spawnPoint.rotation);
+            GameObject spawned = Instantiate(prefab, spawnTransform.position, spawnTransform.rotation);
             s_CurrentSpawned.Add(spawned);
 
             Debug.Log($"[S_SpawnOnBench] {label} '{prefab.name}' spawned on bench " +
-                      $"'{bench.name}' at '{spawnPoint.name}'.");
+                      $"'{bench.name}' at '{spawnTransform.name}'.");
         }
     }
 }
