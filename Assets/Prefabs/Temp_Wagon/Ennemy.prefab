@@ -129,7 +129,7 @@ MonoBehaviour:
   jumpscarePosition: {fileID: 0}
   jumpscareSound: {fileID: 8300000, guid: e7c54fc4b5470e7489134498824ff5e2, type: 3}
   soundVolume: 1
-  footstepSounds: {fileID: 8300000, guid: 69f7881df87f75344a11280b0c4a1044, type: 3}
+  footstepSounds: {fileID: 8300000, guid: e2128ebb0fa42dc4e803107029112779, type: 3}
   footstepVolume: 1
   m_AudioSource: {fileID: 0}
 --- !u!1001 &9181597493312566928
