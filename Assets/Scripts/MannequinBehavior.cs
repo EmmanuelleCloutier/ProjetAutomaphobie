@@ -18,7 +18,7 @@ public class MannequinBehavior : MonoBehaviour
     public float jumpscareDistance = 0.3f;
     [Tooltip("Secondes avant le rechargement du niveau.")]
     public float reloadDelay = 2f;
-    public float JumpscareTriggerDistance = 1f;
+    public float JumpscareTriggerDistance = 1.25f;
     public Transform jumpscarePosition;
 
     [Header("Son")]
@@ -103,8 +103,8 @@ public class MannequinBehavior : MonoBehaviour
       
             Vector3 lookDirection = (m_PlayerTransform.position - transform.position).normalized;
             Quaternion targetRotation = Quaternion.LookRotation(lookDirection);
-            transform.rotation = targetRotation;
-          
+            transform.rotation = targetRotation * Quaternion.Euler(0, -90, 0);
+
             Vector3 direction = (m_PlayerTransform.position - transform.position).normalized;
             Vector3 newPosition = transform.position + direction * teleportDistance;
 

@@ -125,7 +125,7 @@ MonoBehaviour:
   jumpscareObject: {fileID: 8769661727323302846, guid: ee26a6c7f6b1ec447952e4b9d2f4947c, type: 3}
   jumpscareDistance: 0.3
   reloadDelay: 2
-  JumpscareTriggerDistance: 1
+  JumpscareTriggerDistance: 1.25
   jumpscarePosition: {fileID: 0}
   jumpscareSound: {fileID: 8300000, guid: e7c54fc4b5470e7489134498824ff5e2, type: 3}
   soundVolume: 1
