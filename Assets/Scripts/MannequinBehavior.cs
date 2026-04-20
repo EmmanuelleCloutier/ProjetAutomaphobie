@@ -18,6 +18,7 @@ public class MannequinBehavior : MonoBehaviour
     public float jumpscareDistance = 0.3f;
     [Tooltip("Secondes avant le rechargement du niveau.")]
     public float reloadDelay = 2f;
+    public float JumpscareTriggerDistance = 1f;
     public Transform jumpscarePosition;
 
     [Header("Son")]
@@ -72,6 +73,24 @@ public class MannequinBehavior : MonoBehaviour
 
     private void Update()
     {
+        Vector3 directionToPlayer = m_PlayerTransform.position - transform.position;
+        Vector3 PlayerForwardVector = m_PlayerCamera.transform.forward;
+
+        ///
+
+        bool PlayerSeesMannequin = Vector3.Dot(PlayerForwardVector, directionToPlayer.normalized) < 0;
+
+        if (directionToPlayer.magnitude <= JumpscareTriggerDistance && !PlayerSeesMannequin)
+        {
+                TriggerJumpscare();
+                return;
+        }
+
+        if (PlayerSeesMannequin) {bCanMove = false;}
+        else {bCanMove = true; }
+
+        ///
+
         if (!bCanMove || m_PlayerTransform == null)
             return;
 
@@ -80,6 +99,12 @@ public class MannequinBehavior : MonoBehaviour
         {
             m_Timer = 0f;
 
+            //rotation towards player
+      
+            Vector3 lookDirection = (m_PlayerTransform.position - transform.position).normalized;
+            Quaternion targetRotation = Quaternion.LookRotation(lookDirection);
+            transform.rotation = targetRotation;
+          
             Vector3 direction = (m_PlayerTransform.position - transform.position).normalized;
             Vector3 newPosition = transform.position + direction * teleportDistance;
 
@@ -92,6 +117,8 @@ public class MannequinBehavior : MonoBehaviour
 
             newPosition.y = transform.position.y;
             transform.position = newPosition;
+            Debug.Log("DotProduct to: " + Vector3.Dot(PlayerForwardVector, directionToPlayer.normalized));
+            Debug.Log("Distance to player" + directionToPlayer.magnitude);
             //m_Rigidbody.MovePosition(newPosition);
         }
     }
@@ -100,6 +127,7 @@ public class MannequinBehavior : MonoBehaviour
     /// Call this when a raycast from the player first hits this mannequin.
     /// </summary>
     /// <param name="other">The GameObject whose raycast entered.</param>
+   
     public void OnRaycastEnter(GameObject other)
     {
         Debug.Log("Raycast Enter");
@@ -117,7 +145,7 @@ public class MannequinBehavior : MonoBehaviour
         Debug.Log("Can move");
         bCanMove = true;
     }
-
+    /*
     private void OnTriggerEnter(Collider other)
     {
         Debug.Log("Trigger Enter: " + other.gameObject.name);
@@ -129,6 +157,7 @@ public class MannequinBehavior : MonoBehaviour
             TriggerJumpscare();
         }
     }
+   */
 
     private void TriggerJumpscare()
     {
