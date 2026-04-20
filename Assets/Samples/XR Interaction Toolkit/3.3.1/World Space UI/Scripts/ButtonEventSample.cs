@@ -33,7 +33,7 @@ namespace UnityEngine.XR.Interaction.Toolkit.Samples.WorldSpaceUI
             RegisterButtonTextures(SettingsButton);
             RegisterButtonTextures(QuitButton);
 
-            PlayButton.clicked += () => OpenLevel("Gym_Bastien", 1);
+            PlayButton.clicked += () => OpenLevel("Gym_Bastien_V2", 1);
             //SettingsButton.clicked += () => OpenLevel("SettingsMenu");
             QuitButton.clicked += () => Application.Quit();
         }

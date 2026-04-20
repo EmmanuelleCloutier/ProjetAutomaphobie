@@ -18,6 +18,7 @@ public class MannequinBehavior : MonoBehaviour
     public float jumpscareDistance = 0.3f;
     [Tooltip("Secondes avant le rechargement du niveau.")]
     public float reloadDelay = 2f;
+    public float JumpscareTriggerDistance = 1.25f;
     public Transform jumpscarePosition;
 
     [Header("Son")]
@@ -32,7 +33,7 @@ public class MannequinBehavior : MonoBehaviour
     [Tooltip("Volume")]
     [Range(0f, 1f)]
     public float footstepVolume = 1f;
-    private AudioSource m_AudioSource;
+    public AudioSource m_AudioSource;
 
 
     private Transform m_PlayerTransform;
@@ -45,11 +46,21 @@ public class MannequinBehavior : MonoBehaviour
     {
         m_Rigidbody = GetComponent<Rigidbody>();
 
+        if (m_AudioSource == null)
+        {
+            GameObject audioManager = GameObject.Find("AudioManager");
+            if (audioManager != null)
+                m_AudioSource = audioManager.GetComponent<AudioSource>();
+            else
+                Debug.LogWarning("MannequinBehavior: No GameObject named 'AudioManager' found in the scene.", this);
+        }
+
         GameObject player = GameObject.FindWithTag("Player");
         if (player != null)
         {
             m_PlayerTransform = player.transform;
             m_PlayerCamera = player.GetComponentInChildren<Camera>();
+            jumpscarePosition = GameObject.FindWithTag("Jumpscare").transform;
         }
         else
         {
@@ -62,6 +73,24 @@ public class MannequinBehavior : MonoBehaviour
 
     private void Update()
     {
+        Vector3 directionToPlayer = m_PlayerTransform.position - transform.position;
+        Vector3 PlayerForwardVector = m_PlayerCamera.transform.forward;
+
+        ///
+
+        bool PlayerSeesMannequin = Vector3.Dot(PlayerForwardVector, directionToPlayer.normalized) < 0;
+
+        if (directionToPlayer.magnitude <= JumpscareTriggerDistance && !PlayerSeesMannequin)
+        {
+                TriggerJumpscare();
+                return;
+        }
+
+        if (PlayerSeesMannequin) {bCanMove = false;}
+        else {bCanMove = true; }
+
+        ///
+
         if (!bCanMove || m_PlayerTransform == null)
             return;
 
@@ -69,6 +98,12 @@ public class MannequinBehavior : MonoBehaviour
         if (m_Timer >= teleportInterval)
         {
             m_Timer = 0f;
+
+            //rotation towards player
+      
+            Vector3 lookDirection = (m_PlayerTransform.position - transform.position).normalized;
+            Quaternion targetRotation = Quaternion.LookRotation(lookDirection);
+            transform.rotation = targetRotation * Quaternion.Euler(0, -90, 0);
 
             Vector3 direction = (m_PlayerTransform.position - transform.position).normalized;
             Vector3 newPosition = transform.position + direction * teleportDistance;
@@ -81,7 +116,10 @@ public class MannequinBehavior : MonoBehaviour
             }
 
             newPosition.y = transform.position.y;
-            m_Rigidbody.MovePosition(newPosition);
+            transform.position = newPosition;
+            Debug.Log("DotProduct to: " + Vector3.Dot(PlayerForwardVector, directionToPlayer.normalized));
+            Debug.Log("Distance to player" + directionToPlayer.magnitude);
+            //m_Rigidbody.MovePosition(newPosition);
         }
     }
 
@@ -89,6 +127,7 @@ public class MannequinBehavior : MonoBehaviour
     /// Call this when a raycast from the player first hits this mannequin.
     /// </summary>
     /// <param name="other">The GameObject whose raycast entered.</param>
+   
     public void OnRaycastEnter(GameObject other)
     {
         Debug.Log("Raycast Enter");
@@ -106,9 +145,10 @@ public class MannequinBehavior : MonoBehaviour
         Debug.Log("Can move");
         bCanMove = true;
     }
-
+    /*
     private void OnTriggerEnter(Collider other)
     {
+        Debug.Log("Trigger Enter: " + other.gameObject.name);
         // Cherche le tag sur l'objet OU ses parents
         if ((other.CompareTag("Player") ||
              other.transform.root.CompareTag("Player")) && !m_IsDead)
@@ -117,18 +157,20 @@ public class MannequinBehavior : MonoBehaviour
             TriggerJumpscare();
         }
     }
+   */
 
     private void TriggerJumpscare()
     {
         m_IsDead = true;
         bCanMove = false;
 
-        // Positionner le jumpscare devant la caméra du joueur
+        // Spawn a new jumpscare instance oriented in front of the player camera
         if (jumpscareObject != null && m_PlayerCamera != null)
         {
-            jumpscareObject.transform.position = jumpscarePosition.position;
-            jumpscareObject.transform.rotation = jumpscarePosition.rotation;
-            jumpscareObject.SetActive(true);
+            Vector3 spawnPosition = m_PlayerCamera.transform.position + m_PlayerCamera.transform.forward * jumpscareDistance;
+            Quaternion spawnRotation = m_PlayerCamera.transform.rotation;
+            GameObject instance = Instantiate(jumpscareObject, spawnPosition, spawnRotation);
+            instance.SetActive(true);
         }
 
         if (jumpscareSound != null && m_AudioSource != null)

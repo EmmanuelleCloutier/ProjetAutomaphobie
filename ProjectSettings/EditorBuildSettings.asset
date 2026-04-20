@@ -8,12 +8,15 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/MainMenu.unity
     guid: 8599db333f09cf34faca39765ead5b7b
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/Gym_Bastien.unity
     guid: f43de332a5a7f0247a76933e64fd1afa
   - enabled: 0
     path: Assets/Scenes/SampleScene.unity
     guid: 55daccc09a3b69647bbab145b54a3ab3
+  - enabled: 1
+    path: Assets/Scenes/Gym_Bastien_V2.unity
+    guid: 57611d021afd3ff418962d075850a048
   m_configObjects:
     Unity.XR.Oculus.Settings: {fileID: 11400000, guid: bfa1182bd221b4ca89619141f66f1260, type: 2}
     Unity.XR.WindowsMR.Settings: {fileID: 11400000, guid: dc5a169419fa04987b057f65238cf3ba, type: 2}
