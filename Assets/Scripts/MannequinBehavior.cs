@@ -108,11 +108,9 @@ public class MannequinBehavior : MonoBehaviour
             Vector3 direction = (m_PlayerTransform.position - transform.position).normalized;
             Vector3 newPosition = transform.position + direction * teleportDistance;
 
-            if (footstepSounds != null && m_AudioSource != null)
+            if (bCanMove && footstepSounds != null && m_AudioSource != null)
             {
-                AudioClip clip = footstepSounds;
-                if (clip != null)
-                    m_AudioSource.PlayOneShot(clip, footstepVolume);
+                m_AudioSource.PlayOneShot(footstepSounds, footstepVolume);
             }
 
             newPosition.y = transform.position.y;
