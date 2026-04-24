@@ -195,6 +195,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3384851431923350542, guid: ddf80cb9c38ea8d4bbb3fb9009be1559, type: 3}
+      propertyPath: maxDelay
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3384851431923350542, guid: ddf80cb9c38ea8d4bbb3fb9009be1559, type: 3}
+      propertyPath: minDelay
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4317886973446801621, guid: ddf80cb9c38ea8d4bbb3fb9009be1559, type: 3}
       propertyPath: m_LocalRotation.w
       value: 1
@@ -255,6 +263,22 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5956003545834319822, guid: ddf80cb9c38ea8d4bbb3fb9009be1559, type: 3}
+      propertyPath: maxDelay
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5956003545834319822, guid: ddf80cb9c38ea8d4bbb3fb9009be1559, type: 3}
+      propertyPath: minDelay
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6709399438660150651, guid: ddf80cb9c38ea8d4bbb3fb9009be1559, type: 3}
+      propertyPath: maxDelay
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6709399438660150651, guid: ddf80cb9c38ea8d4bbb3fb9009be1559, type: 3}
+      propertyPath: minDelay
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7063323671282832420, guid: ddf80cb9c38ea8d4bbb3fb9009be1559, type: 3}
       propertyPath: m_LocalPosition.z
       value: 0.064
@@ -279,6 +303,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.y
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7346538647566862675, guid: ddf80cb9c38ea8d4bbb3fb9009be1559, type: 3}
+      propertyPath: maxDelay
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7346538647566862675, guid: ddf80cb9c38ea8d4bbb3fb9009be1559, type: 3}
+      propertyPath: minDelay
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7918125330428002712, guid: ddf80cb9c38ea8d4bbb3fb9009be1559, type: 3}
       propertyPath: keyPrefab
       value: 
@@ -294,6 +326,22 @@ PrefabInstance:
     - target: {fileID: 8293816436110354631, guid: ddf80cb9c38ea8d4bbb3fb9009be1559, type: 3}
       propertyPath: m_Name
       value: Wagon
+      objectReference: {fileID: 0}
+    - target: {fileID: 8459210866470072852, guid: ddf80cb9c38ea8d4bbb3fb9009be1559, type: 3}
+      propertyPath: maxDelay
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8459210866470072852, guid: ddf80cb9c38ea8d4bbb3fb9009be1559, type: 3}
+      propertyPath: minDelay
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8852875630295740576, guid: ddf80cb9c38ea8d4bbb3fb9009be1559, type: 3}
+      propertyPath: maxDelay
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8852875630295740576, guid: ddf80cb9c38ea8d4bbb3fb9009be1559, type: 3}
+      propertyPath: minDelay
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects:
