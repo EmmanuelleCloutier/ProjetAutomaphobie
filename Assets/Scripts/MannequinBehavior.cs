@@ -3,6 +3,7 @@ using UnityEngine.SceneManagement;
 
 public class MannequinBehavior : MonoBehaviour
 {
+    public static bool g_EnemiesActive = true;
     public bool bCanMove = false;
 
     [Tooltip("Distance teleported toward the player each interval (metres).")]
@@ -73,6 +74,8 @@ public class MannequinBehavior : MonoBehaviour
 
     private void Update()
     {
+        if (!g_EnemiesActive) return;
+
         Vector3 directionToPlayer = m_PlayerTransform.position - transform.position;
         Vector3 PlayerForwardVector = m_PlayerCamera.transform.forward;
 

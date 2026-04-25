@@ -98,6 +98,8 @@ public class S_PannelTrigger : MonoBehaviour
 
     private void SpawnNextWagon()
     {
+        MannequinBehavior.g_EnemiesActive = false; // Disable enemies when panel triggered
+
         if (wagonPrefab == null)
         {
             Debug.LogWarning($"[S_OpenDoor] No wagon prefab assigned on {gameObject.name}.");
