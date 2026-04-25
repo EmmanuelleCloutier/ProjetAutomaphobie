@@ -10,12 +10,12 @@ GameObject:
   m_Component:
   - component: {fileID: 8790132737815683614}
   m_Layer: 0
-  m_Name: Enemy_Mesh
+  m_Name: Mesh_1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &8790132737815683614
 Transform:
   m_ObjectHideFlags: 0
