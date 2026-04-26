@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.XR;
 
 public class MannequinBehavior : MonoBehaviour
 {
@@ -181,8 +182,18 @@ public class MannequinBehavior : MonoBehaviour
                 m_AudioSource.PlayOneShot(jumpscareSound, soundVolume);
             }
 
+            TriggerHaptics();
             Invoke(nameof(ReloadLevel), reloadDelay);
         }
+    }
+
+    private void TriggerHaptics()
+    {
+        var leftHand = InputDevices.GetDeviceAtXRNode(XRNode.LeftHand);
+        var rightHand = InputDevices.GetDeviceAtXRNode(XRNode.RightHand);
+
+        leftHand.SendHapticImpulse(0, 1f, reloadDelay);
+        rightHand.SendHapticImpulse(0, 1f, reloadDelay);
     }
 
     private void ReloadLevel()

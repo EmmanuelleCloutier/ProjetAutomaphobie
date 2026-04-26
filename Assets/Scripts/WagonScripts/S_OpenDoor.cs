@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.XR;
 
 public class S_OpenDoor : MonoBehaviour
 {
@@ -49,6 +50,7 @@ public class S_OpenDoor : MonoBehaviour
             return;
         }
 
+        TriggerHaptics();
         Animator animator = door.GetComponent<Animator>();
         if (animator != null)
         {
@@ -61,6 +63,15 @@ public class S_OpenDoor : MonoBehaviour
         }
 
         Debug.Log($"[S_OpenDoor] Door '{door.name}' opened on spawn.");
+    }
+
+    private void TriggerHaptics()
+    {
+        var leftHand = InputDevices.GetDeviceAtXRNode(XRNode.LeftHand);
+        var rightHand = InputDevices.GetDeviceAtXRNode(XRNode.RightHand);
+
+        leftHand.SendHapticImpulse(0, 1f, 0.5f);
+        rightHand.SendHapticImpulse(0, 1f, 0.5f);
     }
 
     private System.Collections.IEnumerator RotateDoor()
