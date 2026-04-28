@@ -105,6 +105,8 @@ public class S_CloseDoor : MonoBehaviour
         // Destroy all bench-spawned objects from the previous wagon before the wagon itself.
         S_SpawnOnBench.DestroyAll();
 
+        MannequinBehavior.g_EnemiesActive = true; // Re-enable enemies when door closes
+
         if (previousWagon == null) return;
 
         Debug.Log($"[S_CloseDoor] Destroying previous wagon '{previousWagon.name}'.");

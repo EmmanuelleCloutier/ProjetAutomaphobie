@@ -1,8 +1,10 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.XR;
 
 public class MannequinBehavior : MonoBehaviour
 {
+    public static bool g_EnemiesActive = true;
     public bool bCanMove = false;
 
     [Tooltip("Distance teleported toward the player each interval (metres).")]
@@ -73,6 +75,8 @@ public class MannequinBehavior : MonoBehaviour
 
     private void Update()
     {
+        if (!g_EnemiesActive) return;
+
         Vector3 directionToPlayer = m_PlayerTransform.position - transform.position;
         Vector3 PlayerForwardVector = m_PlayerCamera.transform.forward;
 
@@ -159,24 +163,37 @@ public class MannequinBehavior : MonoBehaviour
 
     private void TriggerJumpscare()
     {
-        m_IsDead = true;
-        bCanMove = false;
-
-        // Spawn a new jumpscare instance oriented in front of the player camera
-        if (jumpscareObject != null && m_PlayerCamera != null)
+        if (!m_IsDead)
         {
-            Vector3 spawnPosition = m_PlayerCamera.transform.position + m_PlayerCamera.transform.forward * jumpscareDistance;
-            Quaternion spawnRotation = m_PlayerCamera.transform.rotation;
-            GameObject instance = Instantiate(jumpscareObject, spawnPosition, spawnRotation);
-            instance.SetActive(true);
-        }
+            m_IsDead = true;
+            bCanMove = false;
 
-        if (jumpscareSound != null && m_AudioSource != null)
-        {
-            m_AudioSource.PlayOneShot(jumpscareSound, soundVolume);
-        }
+            // Spawn a new jumpscare instance oriented in front of the player camera
+            if (jumpscareObject != null && m_PlayerCamera != null)
+            {
+                Vector3 spawnPosition = m_PlayerCamera.transform.position + m_PlayerCamera.transform.forward * jumpscareDistance;
+                Quaternion spawnRotation = m_PlayerCamera.transform.rotation;
+                GameObject instance = Instantiate(jumpscareObject, spawnPosition, spawnRotation);
+                instance.SetActive(true);
+            }
 
-        Invoke(nameof(ReloadLevel), reloadDelay);
+            if (jumpscareSound != null && m_AudioSource != null)
+            {
+                m_AudioSource.PlayOneShot(jumpscareSound, soundVolume);
+            }
+
+            TriggerHaptics();
+            Invoke(nameof(ReloadLevel), reloadDelay);
+        }
+    }
+
+    private void TriggerHaptics()
+    {
+        var leftHand = InputDevices.GetDeviceAtXRNode(XRNode.LeftHand);
+        var rightHand = InputDevices.GetDeviceAtXRNode(XRNode.RightHand);
+
+        leftHand.SendHapticImpulse(0, 1f, reloadDelay);
+        rightHand.SendHapticImpulse(0, 1f, reloadDelay);
     }
 
     private void ReloadLevel()

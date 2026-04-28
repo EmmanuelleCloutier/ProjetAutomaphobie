@@ -22,26 +22,36 @@ public class S_SpawnOnBench : MonoBehaviour
     // ── Inspector fields ──────────────────────────────────────────────────────
 
     [Header("Prefabs")]
-    public GameObject enemyPrefab;
-    public GameObject dummyPrefab;
+    public GameObject[] sittingEnemyPrefabs;
+    public GameObject[] standingEnemyPrefabs;
+    public GameObject[] sittingDummyPrefabs;
+    public GameObject[] standingDummyPrefabs;
     public GameObject keyPrefab;
 
-    [Header("Bench Discovery")]
-    [Tooltip("Name that bench children must contain to be considered valid dummy spawn candidates.")]
+    [Header("Bench & Pole Discovery")]
+    [Tooltip("Name that bench children must contain to be considered valid candidates.")]
     public string benchNameFilter = "Bench";
 
-    [Tooltip("Name that pole children must contain to be considered valid enemy spawn candidates.")]
+    [Tooltip("Name that pole children must contain to be considered valid candidates.")]
     public string poleNameFilter = "SM_pole";
 
-    [Tooltip("Name of the child Transform inside each bench used for dummy/key spawning.")]
+    [Tooltip("Name of the child Transform inside each bench used for sitting entity/key spawning.")]
     public string spawnPointName = "SpawnPoint";
 
-    [Tooltip("Name of the child Transform inside each pole used for enemy spawning.")]
+    [Tooltip("Name of the child Transform inside each pole used for standing entity spawning.")]
     public string enemySpawnPointName = "EnemySpawn";
 
     [Header("Timing")]
     public bool spawnOnStart = true;
     public float spawnDelay = 0f;
+
+    // ── Internal Helper Data ──────────────────────────────────────────────────
+
+    private struct SpawnSlot
+    {
+        public Transform transform;
+        public bool isBench;
+    }
 
     // ── Unity Messages ────────────────────────────────────────────────────────
 
@@ -81,7 +91,6 @@ public class S_SpawnOnBench : MonoBehaviour
         s_PreviousSpawned.AddRange(s_CurrentSpawned);
         s_CurrentSpawned.Clear();
 
-        // Collect benches (for dummies/key) and poles (for enemies) separately.
         var availableBenches = new List<Transform>();
         var availablePoles   = new List<Transform>();
 
@@ -99,61 +108,76 @@ public class S_SpawnOnBench : MonoBehaviour
             return;
         }
 
-        // Shuffle both lists (Fisher-Yates).
+        // Shuffle initial lists to ensure randomness 
         Shuffle(availableBenches);
         Shuffle(availablePoles);
 
-        // Spawn enemies on poles.
-        int poleIndex = 0;
-        SpawnGroup(enemyPrefab, "Enemy", EnemyCount, availablePoles, ref poleIndex, enemySpawnPointName);
+        // 1. Spawn key first on an available bench, so it is strictly placed on a bench
+        if (keyPrefab != null && availableBenches.Count > 0)
+        {
+            Transform bench = availableBenches[0];
+            availableBenches.RemoveAt(0); // Take this bench slot out of the pool
+            
+            Transform spawnTransform = bench.Find(spawnPointName) ?? bench;
+            GameObject spawnedKey = Instantiate(keyPrefab, spawnTransform.position, spawnTransform.rotation);
+            s_CurrentSpawned.Add(spawnedKey);
+            Debug.Log($"[S_SpawnOnBench] Key spawned on '{bench.name}'.");
+        }
 
-        // Spawn dummies on benches.
-        int benchIndex = 0;
-        SpawnGroup(dummyPrefab, "Dummy", DummyCount, availableBenches, ref benchIndex, spawnPointName);
+        // 2. Pool remaining slots together
+        List<SpawnSlot> allSlots = new List<SpawnSlot>();
+        foreach (var b in availableBenches) allSlots.Add(new SpawnSlot { transform = b, isBench = true });
+        foreach (var p in availablePoles)   allSlots.Add(new SpawnSlot { transform = p, isBench = false });
 
-        // Spawn the key on one of the remaining benches.
-        if (keyPrefab != null)
-            SpawnGroup(keyPrefab, "Key", 1, availableBenches, ref benchIndex, spawnPointName);
+        Shuffle(allSlots); // Shuffle benches and poles together to perfectly randomize entities placement
+
+        // 3. Deal out enemies and dummies
+        int totalEntities = EnemyCount + DummyCount;
+        for (int i = 0; i < totalEntities; i++)
+        {
+            if (i >= allSlots.Count)
+            {
+                Debug.LogWarning($"[S_SpawnOnBench] Ran out of slots (needed {totalEntities}, have {allSlots.Count}).");
+                break;
+            }
+
+            bool isEnemy = i < EnemyCount;
+            SpawnSlot slot = allSlots[i];
+            
+            // Choose the correct array based on entity type and slot type (sitting/bench vs standing/pole)
+            GameObject[] prefabArray;
+            if (isEnemy)
+                prefabArray = slot.isBench ? sittingEnemyPrefabs : standingEnemyPrefabs;
+            else
+                prefabArray = slot.isBench ? sittingDummyPrefabs : standingDummyPrefabs;
+
+            if (prefabArray == null || prefabArray.Length == 0)
+            {
+                Debug.LogWarning($"[S_SpawnOnBench] Missing prefabs for {(isEnemy ? "Enemy" : "Dummy")} on {(slot.isBench ? "Bench" : "Pole")} – skipping.");
+                continue;
+            }
+
+            GameObject prefabToSpawn = prefabArray[Random.Range(0, prefabArray.Length)];
+            if (prefabToSpawn == null) continue;
+
+            string targetPointName = slot.isBench ? spawnPointName : enemySpawnPointName;
+            Transform targetTransform = slot.transform.Find(targetPointName) ?? slot.transform;
+
+            GameObject spawnedEntity = Instantiate(prefabToSpawn, targetTransform.position, targetTransform.rotation);
+            s_CurrentSpawned.Add(spawnedEntity);
+
+            Debug.Log($"[S_SpawnOnBench] {(isEnemy ? "Enemy" : "Dummy")} '{prefabToSpawn.name}' spawned on '{slot.transform.name}'.");
+        }
     }
 
     // ── Helpers ───────────────────────────────────────────────────────────────
 
-    private static void Shuffle(List<Transform> list)
+    private static void Shuffle<T>(List<T> list)
     {
         for (int i = list.Count - 1; i > 0; i--)
         {
             int j = Random.Range(0, i + 1);
             (list[i], list[j]) = (list[j], list[i]);
-        }
-    }
-
-    private void SpawnGroup(GameObject prefab, string label, int count,
-                            List<Transform> slots, ref int index, string spawnPoint)
-    {
-        if (prefab == null)
-        {
-            Debug.LogWarning($"[S_SpawnOnBench] '{label}' prefab is not assigned – skipping.");
-            index += count;
-            return;
-        }
-
-        for (int i = 0; i < count; i++, index++)
-        {
-            if (index >= slots.Count)
-            {
-                Debug.LogWarning($"[S_SpawnOnBench] Ran out of slots while spawning '{label}' " +
-                                 $"(needed slot {index}, have {slots.Count}).");
-                return;
-            }
-
-            Transform slot = slots[index];
-            Transform spawnTransform = slot.Find(spawnPoint) ?? slot;
-
-            GameObject spawned = Instantiate(prefab, spawnTransform.position, spawnTransform.rotation);
-            s_CurrentSpawned.Add(spawned);
-
-            Debug.Log($"[S_SpawnOnBench] {label} '{prefab.name}' spawned on '{slot.name}' " +
-                      $"at '{spawnTransform.name}'.");
         }
     }
 }

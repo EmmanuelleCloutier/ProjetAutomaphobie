@@ -4545,8 +4545,7 @@ IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR void MannequinBehavior_Update_mEADE7B1E538BAA
 	memset((&V_5), 0, sizeof(V_5));
 	Vector3_t24C512C7B96BBABAD472002D0BA2BDA40A5A80B2 V_6;
 	memset((&V_6), 0, sizeof(V_6));
-	AudioClip_t5D272C4EB4F2D3ED49F1C346DEA373CF6D585F20* V_7 = NULL;
-	float V_8 = 0.0f;
+	float V_7 = 0.0f;
 	{
 		//<source_info:C:/Users/Coralie/Documents/2026_Hiver/VR/Phobie/ProjetAutomatonophobie/Assets/Scripts/MannequinBehavior.cs:76>
 		Transform_tB27202C6F4E36D225EE28A13E4D662BF99785DB1* L_0 = __this->___m_PlayerTransform;
@@ -4659,7 +4658,7 @@ IL_0085:
 		float L_21 = __this->___teleportInterval;
 		if ((!(((float)L_20) >= ((float)L_21))))
 		{
-			goto IL_01f0;
+			goto IL_01ea;
 		}
 	}
 	{
@@ -4724,91 +4723,84 @@ IL_0085:
 		L_44 = Vector3_op_Addition_m78C0EC70CB66E8DCAC225743D82B268DAEE92067_inline(L_40, L_43, NULL);
 		V_5 = L_44;
 		//<source_info:C:/Users/Coralie/Documents/2026_Hiver/VR/Phobie/ProjetAutomatonophobie/Assets/Scripts/MannequinBehavior.cs:111>
-		AudioClip_t5D272C4EB4F2D3ED49F1C346DEA373CF6D585F20* L_45 = __this->___footstepSounds;
-		il2cpp_codegen_runtime_class_init_inline(Object_tC12DECB6760A7F2CBF65D9DCF18D044C2D97152C_il2cpp_TypeInfo_var);
-		bool L_46;
-		L_46 = Object_op_Inequality_mD0BE578448EAA61948F25C32F8DD55AB1F778602(L_45, (Object_tC12DECB6760A7F2CBF65D9DCF18D044C2D97152C*)NULL, NULL);
-		if (!L_46)
+		bool L_45 = __this->___bCanMove;
+		if (!L_45)
 		{
-			goto IL_0188;
+			goto IL_0182;
 		}
 	}
 	{
-		AudioSource_t871AC2272F896738252F04EE949AEF5B241D3299* L_47 = __this->___m_AudioSource;
+		AudioClip_t5D272C4EB4F2D3ED49F1C346DEA373CF6D585F20* L_46 = __this->___footstepSounds;
 		il2cpp_codegen_runtime_class_init_inline(Object_tC12DECB6760A7F2CBF65D9DCF18D044C2D97152C_il2cpp_TypeInfo_var);
-		bool L_48;
-		L_48 = Object_op_Inequality_mD0BE578448EAA61948F25C32F8DD55AB1F778602(L_47, (Object_tC12DECB6760A7F2CBF65D9DCF18D044C2D97152C*)NULL, NULL);
-		if (!L_48)
+		bool L_47;
+		L_47 = Object_op_Inequality_mD0BE578448EAA61948F25C32F8DD55AB1F778602(L_46, (Object_tC12DECB6760A7F2CBF65D9DCF18D044C2D97152C*)NULL, NULL);
+		if (!L_47)
 		{
-			goto IL_0188;
+			goto IL_0182;
+		}
+	}
+	{
+		AudioSource_t871AC2272F896738252F04EE949AEF5B241D3299* L_48 = __this->___m_AudioSource;
+		il2cpp_codegen_runtime_class_init_inline(Object_tC12DECB6760A7F2CBF65D9DCF18D044C2D97152C_il2cpp_TypeInfo_var);
+		bool L_49;
+		L_49 = Object_op_Inequality_mD0BE578448EAA61948F25C32F8DD55AB1F778602(L_48, (Object_tC12DECB6760A7F2CBF65D9DCF18D044C2D97152C*)NULL, NULL);
+		if (!L_49)
+		{
+			goto IL_0182;
 		}
 	}
 	{
 		//<source_info:C:/Users/Coralie/Documents/2026_Hiver/VR/Phobie/ProjetAutomatonophobie/Assets/Scripts/MannequinBehavior.cs:113>
-		AudioClip_t5D272C4EB4F2D3ED49F1C346DEA373CF6D585F20* L_49 = __this->___footstepSounds;
-		V_7 = L_49;
-		//<source_info:C:/Users/Coralie/Documents/2026_Hiver/VR/Phobie/ProjetAutomatonophobie/Assets/Scripts/MannequinBehavior.cs:114>
-		AudioClip_t5D272C4EB4F2D3ED49F1C346DEA373CF6D585F20* L_50 = V_7;
-		il2cpp_codegen_runtime_class_init_inline(Object_tC12DECB6760A7F2CBF65D9DCF18D044C2D97152C_il2cpp_TypeInfo_var);
-		bool L_51;
-		L_51 = Object_op_Inequality_mD0BE578448EAA61948F25C32F8DD55AB1F778602(L_50, (Object_tC12DECB6760A7F2CBF65D9DCF18D044C2D97152C*)NULL, NULL);
-		if (!L_51)
-		{
-			goto IL_0188;
-		}
-	}
-	{
-		//<source_info:C:/Users/Coralie/Documents/2026_Hiver/VR/Phobie/ProjetAutomatonophobie/Assets/Scripts/MannequinBehavior.cs:115>
-		AudioSource_t871AC2272F896738252F04EE949AEF5B241D3299* L_52 = __this->___m_AudioSource;
-		AudioClip_t5D272C4EB4F2D3ED49F1C346DEA373CF6D585F20* L_53 = V_7;
-		float L_54 = __this->___footstepVolume;
-		NullCheck(L_52);
-		AudioSource_PlayOneShot_mF6FE95C58996B38EF6E7F7482F95F5E15E0AB30B(L_52, L_53, L_54, NULL);
+		AudioSource_t871AC2272F896738252F04EE949AEF5B241D3299* L_50 = __this->___m_AudioSource;
+		AudioClip_t5D272C4EB4F2D3ED49F1C346DEA373CF6D585F20* L_51 = __this->___footstepSounds;
+		float L_52 = __this->___footstepVolume;
+		NullCheck(L_50);
+		AudioSource_PlayOneShot_mF6FE95C58996B38EF6E7F7482F95F5E15E0AB30B(L_50, L_51, L_52, NULL);
 	}
 
-IL_0188:
+IL_0182:
 	{
+		//<source_info:C:/Users/Coralie/Documents/2026_Hiver/VR/Phobie/ProjetAutomatonophobie/Assets/Scripts/MannequinBehavior.cs:116>
+		Transform_tB27202C6F4E36D225EE28A13E4D662BF99785DB1* L_53;
+		L_53 = Component_get_transform_m2919A1D81931E6932C7F06D4C2F0AB8DDA9A5371(__this, NULL);
+		NullCheck(L_53);
+		Vector3_t24C512C7B96BBABAD472002D0BA2BDA40A5A80B2 L_54;
+		L_54 = Transform_get_position_m69CD5FA214FDAE7BB701552943674846C220FDE1(L_53, NULL);
+		float L_55 = L_54.___y;
+		(&V_5)->___y = L_55;
+		//<source_info:C:/Users/Coralie/Documents/2026_Hiver/VR/Phobie/ProjetAutomatonophobie/Assets/Scripts/MannequinBehavior.cs:117>
+		Transform_tB27202C6F4E36D225EE28A13E4D662BF99785DB1* L_56;
+		L_56 = Component_get_transform_m2919A1D81931E6932C7F06D4C2F0AB8DDA9A5371(__this, NULL);
+		Vector3_t24C512C7B96BBABAD472002D0BA2BDA40A5A80B2 L_57 = V_5;
+		NullCheck(L_56);
+		Transform_set_position_mA1A817124BB41B685043DED2A9BA48CDF37C4156(L_56, L_57, NULL);
 		//<source_info:C:/Users/Coralie/Documents/2026_Hiver/VR/Phobie/ProjetAutomatonophobie/Assets/Scripts/MannequinBehavior.cs:118>
-		Transform_tB27202C6F4E36D225EE28A13E4D662BF99785DB1* L_55;
-		L_55 = Component_get_transform_m2919A1D81931E6932C7F06D4C2F0AB8DDA9A5371(__this, NULL);
-		NullCheck(L_55);
-		Vector3_t24C512C7B96BBABAD472002D0BA2BDA40A5A80B2 L_56;
-		L_56 = Transform_get_position_m69CD5FA214FDAE7BB701552943674846C220FDE1(L_55, NULL);
-		float L_57 = L_56.___y;
-		(&V_5)->___y = L_57;
-		//<source_info:C:/Users/Coralie/Documents/2026_Hiver/VR/Phobie/ProjetAutomatonophobie/Assets/Scripts/MannequinBehavior.cs:119>
-		Transform_tB27202C6F4E36D225EE28A13E4D662BF99785DB1* L_58;
-		L_58 = Component_get_transform_m2919A1D81931E6932C7F06D4C2F0AB8DDA9A5371(__this, NULL);
-		Vector3_t24C512C7B96BBABAD472002D0BA2BDA40A5A80B2 L_59 = V_5;
-		NullCheck(L_58);
-		Transform_set_position_mA1A817124BB41B685043DED2A9BA48CDF37C4156(L_58, L_59, NULL);
-		//<source_info:C:/Users/Coralie/Documents/2026_Hiver/VR/Phobie/ProjetAutomatonophobie/Assets/Scripts/MannequinBehavior.cs:120>
-		Vector3_t24C512C7B96BBABAD472002D0BA2BDA40A5A80B2 L_60 = V_1;
-		Vector3_t24C512C7B96BBABAD472002D0BA2BDA40A5A80B2 L_61;
-		L_61 = Vector3_get_normalized_m736BBF65D5CDA7A18414370D15B4DFCC1E466F07_inline((&V_0), NULL);
-		float L_62;
-		L_62 = Vector3_Dot_mBB86BB940AA0A32FA7D3C02AC42E5BC7095A5D52_inline(L_60, L_61, NULL);
-		V_8 = L_62;
-		String_t* L_63;
-		L_63 = Single_ToString_mE282EDA9CA4F7DF88432D807732837A629D04972((&V_8), NULL);
-		String_t* L_64;
-		L_64 = String_Concat_m9E3155FB84015C823606188F53B47CB44C444991(_stringLiteralBA17C0393648348A5533BA554BE487CCF3E2FF60, L_63, NULL);
+		Vector3_t24C512C7B96BBABAD472002D0BA2BDA40A5A80B2 L_58 = V_1;
+		Vector3_t24C512C7B96BBABAD472002D0BA2BDA40A5A80B2 L_59;
+		L_59 = Vector3_get_normalized_m736BBF65D5CDA7A18414370D15B4DFCC1E466F07_inline((&V_0), NULL);
+		float L_60;
+		L_60 = Vector3_Dot_mBB86BB940AA0A32FA7D3C02AC42E5BC7095A5D52_inline(L_58, L_59, NULL);
+		V_7 = L_60;
+		String_t* L_61;
+		L_61 = Single_ToString_mE282EDA9CA4F7DF88432D807732837A629D04972((&V_7), NULL);
+		String_t* L_62;
+		L_62 = String_Concat_m9E3155FB84015C823606188F53B47CB44C444991(_stringLiteralBA17C0393648348A5533BA554BE487CCF3E2FF60, L_61, NULL);
 		il2cpp_codegen_runtime_class_init_inline(Debug_t8394C7EEAECA3689C2C9B9DE9C7166D73596276F_il2cpp_TypeInfo_var);
-		Debug_Log_m87A9A3C761FF5C43ED8A53B16190A53D08F818BB(L_64, NULL);
-		//<source_info:C:/Users/Coralie/Documents/2026_Hiver/VR/Phobie/ProjetAutomatonophobie/Assets/Scripts/MannequinBehavior.cs:121>
-		float L_65;
-		L_65 = Vector3_get_magnitude_mF0D6017E90B345F1F52D1CC564C640F1A847AF2D_inline((&V_0), NULL);
-		V_8 = L_65;
-		String_t* L_66;
-		L_66 = Single_ToString_mE282EDA9CA4F7DF88432D807732837A629D04972((&V_8), NULL);
-		String_t* L_67;
-		L_67 = String_Concat_m9E3155FB84015C823606188F53B47CB44C444991(_stringLiteralCE795EFE68EBE95E9AC1E4FED795D277DCF864B3, L_66, NULL);
-		Debug_Log_m87A9A3C761FF5C43ED8A53B16190A53D08F818BB(L_67, NULL);
+		Debug_Log_m87A9A3C761FF5C43ED8A53B16190A53D08F818BB(L_62, NULL);
+		//<source_info:C:/Users/Coralie/Documents/2026_Hiver/VR/Phobie/ProjetAutomatonophobie/Assets/Scripts/MannequinBehavior.cs:119>
+		float L_63;
+		L_63 = Vector3_get_magnitude_mF0D6017E90B345F1F52D1CC564C640F1A847AF2D_inline((&V_0), NULL);
+		V_7 = L_63;
+		String_t* L_64;
+		L_64 = Single_ToString_mE282EDA9CA4F7DF88432D807732837A629D04972((&V_7), NULL);
+		String_t* L_65;
+		L_65 = String_Concat_m9E3155FB84015C823606188F53B47CB44C444991(_stringLiteralCE795EFE68EBE95E9AC1E4FED795D277DCF864B3, L_64, NULL);
+		Debug_Log_m87A9A3C761FF5C43ED8A53B16190A53D08F818BB(L_65, NULL);
 	}
 
-IL_01f0:
+IL_01ea:
 	{
-		//<source_info:C:/Users/Coralie/Documents/2026_Hiver/VR/Phobie/ProjetAutomatonophobie/Assets/Scripts/MannequinBehavior.cs:124>
+		//<source_info:C:/Users/Coralie/Documents/2026_Hiver/VR/Phobie/ProjetAutomatonophobie/Assets/Scripts/MannequinBehavior.cs:122>
 		return;
 	}
 }
@@ -4824,14 +4816,14 @@ IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR void MannequinBehavior_OnRaycastEnter_m3F4864
 		s_Il2CppMethodInitialized = true;
 	}
 	{
-		//<source_info:C:/Users/Coralie/Documents/2026_Hiver/VR/Phobie/ProjetAutomatonophobie/Assets/Scripts/MannequinBehavior.cs:133>
+		//<source_info:C:/Users/Coralie/Documents/2026_Hiver/VR/Phobie/ProjetAutomatonophobie/Assets/Scripts/MannequinBehavior.cs:131>
 		il2cpp_codegen_runtime_class_init_inline(Debug_t8394C7EEAECA3689C2C9B9DE9C7166D73596276F_il2cpp_TypeInfo_var);
 		Debug_Log_m87A9A3C761FF5C43ED8A53B16190A53D08F818BB(_stringLiteral14482D22501B6D380E1FA6FD1FFABA7F5118DE1B, NULL);
-		//<source_info:C:/Users/Coralie/Documents/2026_Hiver/VR/Phobie/ProjetAutomatonophobie/Assets/Scripts/MannequinBehavior.cs:134>
+		//<source_info:C:/Users/Coralie/Documents/2026_Hiver/VR/Phobie/ProjetAutomatonophobie/Assets/Scripts/MannequinBehavior.cs:132>
 		Debug_Log_m87A9A3C761FF5C43ED8A53B16190A53D08F818BB(_stringLiteral6ECFC9F72555E5218C6A418C11C5EAF98A6BA877, NULL);
-		//<source_info:C:/Users/Coralie/Documents/2026_Hiver/VR/Phobie/ProjetAutomatonophobie/Assets/Scripts/MannequinBehavior.cs:135>
+		//<source_info:C:/Users/Coralie/Documents/2026_Hiver/VR/Phobie/ProjetAutomatonophobie/Assets/Scripts/MannequinBehavior.cs:133>
 		__this->___bCanMove = (bool)0;
-		//<source_info:C:/Users/Coralie/Documents/2026_Hiver/VR/Phobie/ProjetAutomatonophobie/Assets/Scripts/MannequinBehavior.cs:136>
+		//<source_info:C:/Users/Coralie/Documents/2026_Hiver/VR/Phobie/ProjetAutomatonophobie/Assets/Scripts/MannequinBehavior.cs:134>
 		return;
 	}
 }
@@ -4847,14 +4839,14 @@ IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR void MannequinBehavior_OnRaycastExit_mDE01623
 		s_Il2CppMethodInitialized = true;
 	}
 	{
-		//<source_info:C:/Users/Coralie/Documents/2026_Hiver/VR/Phobie/ProjetAutomatonophobie/Assets/Scripts/MannequinBehavior.cs:144>
+		//<source_info:C:/Users/Coralie/Documents/2026_Hiver/VR/Phobie/ProjetAutomatonophobie/Assets/Scripts/MannequinBehavior.cs:142>
 		il2cpp_codegen_runtime_class_init_inline(Debug_t8394C7EEAECA3689C2C9B9DE9C7166D73596276F_il2cpp_TypeInfo_var);
 		Debug_Log_m87A9A3C761FF5C43ED8A53B16190A53D08F818BB(_stringLiteral12E7B2E3955511F97ED4C0F1E5F9EA6444170C3C, NULL);
-		//<source_info:C:/Users/Coralie/Documents/2026_Hiver/VR/Phobie/ProjetAutomatonophobie/Assets/Scripts/MannequinBehavior.cs:145>
+		//<source_info:C:/Users/Coralie/Documents/2026_Hiver/VR/Phobie/ProjetAutomatonophobie/Assets/Scripts/MannequinBehavior.cs:143>
 		Debug_Log_m87A9A3C761FF5C43ED8A53B16190A53D08F818BB(_stringLiteral468741858C42B974B35A286637DEAEBC004DF018, NULL);
-		//<source_info:C:/Users/Coralie/Documents/2026_Hiver/VR/Phobie/ProjetAutomatonophobie/Assets/Scripts/MannequinBehavior.cs:146>
+		//<source_info:C:/Users/Coralie/Documents/2026_Hiver/VR/Phobie/ProjetAutomatonophobie/Assets/Scripts/MannequinBehavior.cs:144>
 		__this->___bCanMove = (bool)1;
-		//<source_info:C:/Users/Coralie/Documents/2026_Hiver/VR/Phobie/ProjetAutomatonophobie/Assets/Scripts/MannequinBehavior.cs:147>
+		//<source_info:C:/Users/Coralie/Documents/2026_Hiver/VR/Phobie/ProjetAutomatonophobie/Assets/Scripts/MannequinBehavior.cs:145>
 		return;
 	}
 }
@@ -4874,11 +4866,11 @@ IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR void MannequinBehavior_TriggerJumpscare_m96EB
 	Quaternion_tDA59F214EF07D7700B26E40E562F267AF7306974 V_1;
 	memset((&V_1), 0, sizeof(V_1));
 	{
-		//<source_info:C:/Users/Coralie/Documents/2026_Hiver/VR/Phobie/ProjetAutomatonophobie/Assets/Scripts/MannequinBehavior.cs:164>
+		//<source_info:C:/Users/Coralie/Documents/2026_Hiver/VR/Phobie/ProjetAutomatonophobie/Assets/Scripts/MannequinBehavior.cs:162>
 		__this->___m_IsDead = (bool)1;
-		//<source_info:C:/Users/Coralie/Documents/2026_Hiver/VR/Phobie/ProjetAutomatonophobie/Assets/Scripts/MannequinBehavior.cs:165>
+		//<source_info:C:/Users/Coralie/Documents/2026_Hiver/VR/Phobie/ProjetAutomatonophobie/Assets/Scripts/MannequinBehavior.cs:163>
 		__this->___bCanMove = (bool)0;
-		//<source_info:C:/Users/Coralie/Documents/2026_Hiver/VR/Phobie/ProjetAutomatonophobie/Assets/Scripts/MannequinBehavior.cs:168>
+		//<source_info:C:/Users/Coralie/Documents/2026_Hiver/VR/Phobie/ProjetAutomatonophobie/Assets/Scripts/MannequinBehavior.cs:166>
 		GameObject_t76FEDD663AB33C991A9C9A23129337651094216F* L_0 = __this->___jumpscareObject;
 		il2cpp_codegen_runtime_class_init_inline(Object_tC12DECB6760A7F2CBF65D9DCF18D044C2D97152C_il2cpp_TypeInfo_var);
 		bool L_1;
@@ -4899,7 +4891,7 @@ IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR void MannequinBehavior_TriggerJumpscare_m96EB
 		}
 	}
 	{
-		//<source_info:C:/Users/Coralie/Documents/2026_Hiver/VR/Phobie/ProjetAutomatonophobie/Assets/Scripts/MannequinBehavior.cs:170>
+		//<source_info:C:/Users/Coralie/Documents/2026_Hiver/VR/Phobie/ProjetAutomatonophobie/Assets/Scripts/MannequinBehavior.cs:168>
 		Camera_tA92CC927D7439999BC82DBEDC0AA45B470F9E184* L_4 = __this->___m_PlayerCamera;
 		NullCheck(L_4);
 		Transform_tB27202C6F4E36D225EE28A13E4D662BF99785DB1* L_5;
@@ -4920,7 +4912,7 @@ IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR void MannequinBehavior_TriggerJumpscare_m96EB
 		Vector3_t24C512C7B96BBABAD472002D0BA2BDA40A5A80B2 L_12;
 		L_12 = Vector3_op_Addition_m78C0EC70CB66E8DCAC225743D82B268DAEE92067_inline(L_6, L_11, NULL);
 		V_0 = L_12;
-		//<source_info:C:/Users/Coralie/Documents/2026_Hiver/VR/Phobie/ProjetAutomatonophobie/Assets/Scripts/MannequinBehavior.cs:171>
+		//<source_info:C:/Users/Coralie/Documents/2026_Hiver/VR/Phobie/ProjetAutomatonophobie/Assets/Scripts/MannequinBehavior.cs:169>
 		Camera_tA92CC927D7439999BC82DBEDC0AA45B470F9E184* L_13 = __this->___m_PlayerCamera;
 		NullCheck(L_13);
 		Transform_tB27202C6F4E36D225EE28A13E4D662BF99785DB1* L_14;
@@ -4929,21 +4921,21 @@ IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR void MannequinBehavior_TriggerJumpscare_m96EB
 		Quaternion_tDA59F214EF07D7700B26E40E562F267AF7306974 L_15;
 		L_15 = Transform_get_rotation_m32AF40CA0D50C797DA639A696F8EAEC7524C179C(L_14, NULL);
 		V_1 = L_15;
-		//<source_info:C:/Users/Coralie/Documents/2026_Hiver/VR/Phobie/ProjetAutomatonophobie/Assets/Scripts/MannequinBehavior.cs:172>
+		//<source_info:C:/Users/Coralie/Documents/2026_Hiver/VR/Phobie/ProjetAutomatonophobie/Assets/Scripts/MannequinBehavior.cs:170>
 		GameObject_t76FEDD663AB33C991A9C9A23129337651094216F* L_16 = __this->___jumpscareObject;
 		Vector3_t24C512C7B96BBABAD472002D0BA2BDA40A5A80B2 L_17 = V_0;
 		Quaternion_tDA59F214EF07D7700B26E40E562F267AF7306974 L_18 = V_1;
 		il2cpp_codegen_runtime_class_init_inline(Object_tC12DECB6760A7F2CBF65D9DCF18D044C2D97152C_il2cpp_TypeInfo_var);
 		GameObject_t76FEDD663AB33C991A9C9A23129337651094216F* L_19;
 		L_19 = Object_Instantiate_TisGameObject_t76FEDD663AB33C991A9C9A23129337651094216F_m831D2F71DF2AA6C93AFDFEFA04CF2CFC5FBBCDB4(L_16, L_17, L_18, Object_Instantiate_TisGameObject_t76FEDD663AB33C991A9C9A23129337651094216F_m831D2F71DF2AA6C93AFDFEFA04CF2CFC5FBBCDB4_RuntimeMethod_var);
-		//<source_info:C:/Users/Coralie/Documents/2026_Hiver/VR/Phobie/ProjetAutomatonophobie/Assets/Scripts/MannequinBehavior.cs:173>
+		//<source_info:C:/Users/Coralie/Documents/2026_Hiver/VR/Phobie/ProjetAutomatonophobie/Assets/Scripts/MannequinBehavior.cs:171>
 		NullCheck(L_19);
 		GameObject_SetActive_m638E92E1E75E519E5B24CF150B08CA8E0CDFAB92(L_19, (bool)1, NULL);
 	}
 
 IL_007f:
 	{
-		//<source_info:C:/Users/Coralie/Documents/2026_Hiver/VR/Phobie/ProjetAutomatonophobie/Assets/Scripts/MannequinBehavior.cs:176>
+		//<source_info:C:/Users/Coralie/Documents/2026_Hiver/VR/Phobie/ProjetAutomatonophobie/Assets/Scripts/MannequinBehavior.cs:174>
 		AudioClip_t5D272C4EB4F2D3ED49F1C346DEA373CF6D585F20* L_20 = __this->___jumpscareSound;
 		il2cpp_codegen_runtime_class_init_inline(Object_tC12DECB6760A7F2CBF65D9DCF18D044C2D97152C_il2cpp_TypeInfo_var);
 		bool L_21;
@@ -4964,7 +4956,7 @@ IL_007f:
 		}
 	}
 	{
-		//<source_info:C:/Users/Coralie/Documents/2026_Hiver/VR/Phobie/ProjetAutomatonophobie/Assets/Scripts/MannequinBehavior.cs:178>
+		//<source_info:C:/Users/Coralie/Documents/2026_Hiver/VR/Phobie/ProjetAutomatonophobie/Assets/Scripts/MannequinBehavior.cs:176>
 		AudioSource_t871AC2272F896738252F04EE949AEF5B241D3299* L_24 = __this->___m_AudioSource;
 		AudioClip_t5D272C4EB4F2D3ED49F1C346DEA373CF6D585F20* L_25 = __this->___jumpscareSound;
 		float L_26 = __this->___soundVolume;
@@ -4974,10 +4966,10 @@ IL_007f:
 
 IL_00b2:
 	{
-		//<source_info:C:/Users/Coralie/Documents/2026_Hiver/VR/Phobie/ProjetAutomatonophobie/Assets/Scripts/MannequinBehavior.cs:181>
+		//<source_info:C:/Users/Coralie/Documents/2026_Hiver/VR/Phobie/ProjetAutomatonophobie/Assets/Scripts/MannequinBehavior.cs:179>
 		float L_27 = __this->___reloadDelay;
 		MonoBehaviour_Invoke_mF724350C59362B0F1BFE26383209A274A29A63FB(__this, _stringLiteralD5A41DAB32446F86EA7D7B7A4131AD0A20660DEE, L_27, NULL);
-		//<source_info:C:/Users/Coralie/Documents/2026_Hiver/VR/Phobie/ProjetAutomatonophobie/Assets/Scripts/MannequinBehavior.cs:182>
+		//<source_info:C:/Users/Coralie/Documents/2026_Hiver/VR/Phobie/ProjetAutomatonophobie/Assets/Scripts/MannequinBehavior.cs:180>
 		return;
 	}
 }
@@ -4993,7 +4985,7 @@ IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR void MannequinBehavior_ReloadLevel_m700CDEFCF
 	Scene_tA1DC762B79745EB5140F054C884855B922318356 V_0;
 	memset((&V_0), 0, sizeof(V_0));
 	{
-		//<source_info:C:/Users/Coralie/Documents/2026_Hiver/VR/Phobie/ProjetAutomatonophobie/Assets/Scripts/MannequinBehavior.cs:186>
+		//<source_info:C:/Users/Coralie/Documents/2026_Hiver/VR/Phobie/ProjetAutomatonophobie/Assets/Scripts/MannequinBehavior.cs:184>
 		il2cpp_codegen_runtime_class_init_inline(SceneManager_tA0EF56A88ACA4A15731AF7FDC10A869FA4C698FA_il2cpp_TypeInfo_var);
 		Scene_tA1DC762B79745EB5140F054C884855B922318356 L_0;
 		L_0 = SceneManager_GetActiveScene_m0B320EC4302F51A71495D1CCD1A0FF9C2ED1FDC8(NULL);
@@ -5001,7 +4993,7 @@ IL2CPP_EXTERN_C IL2CPP_METHOD_ATTR void MannequinBehavior_ReloadLevel_m700CDEFCF
 		int32_t L_1;
 		L_1 = Scene_get_buildIndex_m82B6E0C96C85C952B7A2D794DB73CDA99AA9A57E((&V_0), NULL);
 		SceneManager_LoadScene_m0957E62F2A0A0243C79394E5B74E8EFA86BE5ED1(L_1, NULL);
-		//<source_info:C:/Users/Coralie/Documents/2026_Hiver/VR/Phobie/ProjetAutomatonophobie/Assets/Scripts/MannequinBehavior.cs:187>
+		//<source_info:C:/Users/Coralie/Documents/2026_Hiver/VR/Phobie/ProjetAutomatonophobie/Assets/Scripts/MannequinBehavior.cs:185>
 		return;
 	}
 }

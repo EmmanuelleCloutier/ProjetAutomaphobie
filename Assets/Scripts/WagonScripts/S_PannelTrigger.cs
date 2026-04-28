@@ -17,6 +17,8 @@ public class S_PannelTrigger : MonoBehaviour
     [Tooltip("The wagon prefab to instantiate when the door is opened.")]
     public GameObject wagonPrefab;
 
+    public GameObject LockMesh;
+
     [Tooltip("Empty GameObject named 'NextWagon' that defines where the next wagon spawns (position & rotation).")]
     public Transform nextWagonSpawnPoint;
 
@@ -83,6 +85,11 @@ public class S_PannelTrigger : MonoBehaviour
         S_SpawnOnBench.WagonNumber++;
 
         SpawnNextWagon();
+
+        // Disable the lock mesh if assigned, to visually indicate the door is now open.
+        if (LockMesh != null)
+            LockMesh.SetActive(false);
+
         OpenDoor();
 
         if (consumeKey)
@@ -91,6 +98,8 @@ public class S_PannelTrigger : MonoBehaviour
 
     private void SpawnNextWagon()
     {
+        MannequinBehavior.g_EnemiesActive = false; // Disable enemies when panel triggered
+
         if (wagonPrefab == null)
         {
             Debug.LogWarning($"[S_OpenDoor] No wagon prefab assigned on {gameObject.name}.");
